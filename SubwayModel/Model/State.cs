@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace SubwayModel.Model
 {
-    public class State
+    static public class State
     {
-
+        static public int simulationInterval;
+        static public int simulationTime;
+        static public int averageTransmittance;
     }
 }
