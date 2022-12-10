@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SubwayModel.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,14 @@ namespace WindowsFormsApp
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var subway = new Subway();
+            subway.Simulation();
+            label4.Text = State.averageEnterWaiting.ToString();
+            label5.Text = State.ratioGuests.ToString();
         }
     }
 }

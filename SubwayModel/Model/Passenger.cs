@@ -6,9 +6,16 @@ using System.Threading.Tasks;
 
 namespace SubwayModel.Model.Passengers
 {
-    public abstract class Passenger
+    public class Passenger
     {
         public int timeWaiting { get; set; }
+        public int trainSide { get; }
+
+        public Passenger(Random random)
+        {
+            timeWaiting = 0;
+            trainSide = random.Next(1,3);
+        }
 
         public void EnterSubway(Subway subway)
         {
@@ -43,8 +50,6 @@ namespace SubwayModel.Model.Passengers
                 }
             }
         }
-
-        public abstract void EnterTrain(Train train, Subway subway);
 
         public bool LeaveSubway(Random rnd)
         {

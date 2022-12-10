@@ -12,7 +12,17 @@ namespace SubwayModel.Model
         public int maxPassengers { get;}
         public List<Passenger> passengers { get; set; }
 
-        public abstract void TakePassenger(Passenger passenger, Subway subway);
+        public Train(int maxPassengers)
+        {
+            this.maxPassengers = maxPassengers;
+            passengers = new List<Passenger>();
+        }
+
+        public void EnterSubway(Subway subway)
+        {
+            subway.trains.Add(this);
+        }
+        public abstract void TakePassengers(List<Passenger> passengers, Subway subway);
 
         public void LeavePassenger(Passenger passenger, Subway subway)
         {
