@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubwayBL", "SubwayModel\SubwayBL.csproj", "{AEA3ED26-FA30-4A13-AB46-190ADB672AB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp", "WindowsFormsApp\WindowsFormsApp.csproj", "{8BB8E65C-5926-4BE1-8B93-67AB8B1A0DE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{AEA3ED26-FA30-4A13-AB46-190ADB672AB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEA3ED26-FA30-4A13-AB46-190ADB672AB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEA3ED26-FA30-4A13-AB46-190ADB672AB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BB8E65C-5926-4BE1-8B93-67AB8B1A0DE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BB8E65C-5926-4BE1-8B93-67AB8B1A0DE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BB8E65C-5926-4BE1-8B93-67AB8B1A0DE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BB8E65C-5926-4BE1-8B93-67AB8B1A0DE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
