@@ -37,14 +37,14 @@ namespace SubwayModel.Model.Passengers
         public void TryEnterSubway(Subway subway)
         {
             if (!subway.AreAvailableSpace(this))
-                _timeWaiting += 5;
+                _timeWaiting += Settings.averageTransmittanceTrains;
         }
 
         public bool TryEnterTrain(Train train)
         {
             if (!train.AreAvailableSeats(this))
             {
-                _timeWaiting += 5;
+                _timeWaiting += Settings.averageTransmittanceTrains;
                 return false;
             }
             return true;

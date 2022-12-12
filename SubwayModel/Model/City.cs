@@ -25,7 +25,7 @@ namespace SubwayModel.Model
             Statistics.averageSubwayWaiting.Clear();
             Statistics.ratioSubwayPassengers.Clear();
 
-            for (int currTime = 0; currTime < Settings.simulationTime * 60; currTime += Settings.averageTransmittanceTrains)
+            for (int currTime = 0; currTime < Settings.simulationTime; currTime ++)
             {
                 LeftSide();
 
@@ -48,18 +48,6 @@ namespace SubwayModel.Model
                 Statistics.ratioPassengers = 0;
         }
 
-        public void AddSubway(Subway subway)
-        {
-            _subways.Add(subway);
-        }
-
-        public List<Subway> GetSubways()
-        {
-            var s = new List<Subway>(_subways);
-
-            return s;
-        }
-
         private void LeftSide()
         {
             for (int i = 0; i < _subways.Count; i++)
@@ -69,17 +57,22 @@ namespace SubwayModel.Model
                     for (int Minutes = 0; Minutes < 60; Minutes += Settings.averageTransmittanceTrains)
                     {
                         _leftTrains.Add(new TrainLeft(Settings.TrainsCapacity));
+                        _subways[i].PassengerEnter(_subways.Select(s => s.Name).ToList(), _subways[i].Name);
+
+                        _subways[i].Simulation(_leftTrains.ToList<Train>());
+
                     }
                 }
                 else
                 {
                     foreach (var train in _leftTrains)
+                    {
                         train.EnterSubway(_subways[i]);
+                        _subways[i].PassengerEnter(_subways.Select(s => s.Name).ToList(), _subways[i].Name);
+
+                        _subways[i].Simulation(_leftTrains.ToList<Train>());
+                    }
                 }
-
-                _subways[i].PassengerEnter(_subways.Select(s => s.Name).ToList(), _subways[i].Name);
-
-                _subways[i].Simulation(_leftTrains.ToList<Train>());
             }
             _leftTrains.Clear();
         }

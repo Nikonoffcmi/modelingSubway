@@ -11,12 +11,12 @@ namespace SubwayModel.Model
         static public Random random = new Random();
         static public int simulationTime = 5;
         static public int averageTransmittanceTrains = 10;
-        static public int TrainsCapacity = 5;
+        static public int TrainsCapacity = 20;
         static public List<Subway> Subways = new List<Subway>()
         {
-            new Subway("кет", 15, 15),
-            new Subway("diyb", 8, 8),
-            new Subway("linq", 15, 11),
+            new Subway("кет", 15),
+            new Subway("diyb", 8),
+            new Subway("linq", 11),
         };
     }
 

@@ -60,7 +60,7 @@ namespace WindowsFormsApp
             dataGridView2.Rows.Clear();
             foreach (var subway in Settings.Subways)
             {
-                dataGridView2.Rows.Add(subway.Name, subway.FreeSpace, subway.AverageTransmittancePassengers);
+                dataGridView2.Rows.Add(subway.Name, subway.AverageTransmittancePassengers);
             }
         }
     }

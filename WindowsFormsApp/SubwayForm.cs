@@ -22,9 +22,8 @@ namespace WindowsFormsApp
         private void button1_Click(object sender, EventArgs e)
         {
             var name = textBox1.Text;
-            var freeSpace = Convert.ToInt32(numericUpDown1.Value);
             var averageTransmittancePassengers = Convert.ToInt32(numericUpDown2.Value);
-            subway = new Subway(name, freeSpace, averageTransmittancePassengers);
+            subway = new Subway(name, averageTransmittancePassengers);
             Close();
         }
     }
