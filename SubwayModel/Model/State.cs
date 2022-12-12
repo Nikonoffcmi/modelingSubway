@@ -13,7 +13,9 @@ namespace SubwayModel.Model
         static public int simulationTime = 5;
         static public int averageTransmittanceTrains = 10;
         static public int TrainsCapacity = 4;
-        static public int averageEnterWaiting = 0;
+        static public List<int> averageSubwayWaiting = new List<int>();
+        static public int averageWaiting;
+        static public List<double> ratioSubwayPassengers = new List<double>();
         static public double ratioPassengers = .0f;
     }
 }

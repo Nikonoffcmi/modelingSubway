@@ -13,19 +13,11 @@ namespace SubwayModel.Model
         public TrainLeft(int maxPassengers) : base(maxPassengers)
         {
         }
-        override public Train EnterSubway(Subway subway)
-        {
-            _passengers.RemoveAll(p => p.Destination == subway.Name);
-            return this;
-        }
 
-        override public bool AreAvailableSeats(Passenger passenger)
+        public override bool IsTakeCorrectDirection(Passenger passenger)
         {
-            if (passenger.SideTrain == 1 && this._passengers.Count < _maxPassengers)
-            {
-                _passengers.Add(passenger);
+            if (passenger.SideTrain == 1)
                 return true;
-            }
             else
                 return false;
         }

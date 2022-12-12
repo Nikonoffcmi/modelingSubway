@@ -29,7 +29,6 @@ namespace WindowsFormsApp
             State.TrainsCapacity = Convert.ToInt32(numericUpDown4.Value);
             try
             {
-
                 city.Simulation();
             }
             catch (Exception ex)
@@ -38,7 +37,7 @@ namespace WindowsFormsApp
                     $"Details:\n\n{ex.StackTrace}");
                 DialogResult = DialogResult.None;
             }
-            label4.Text = State.averageEnterWaiting.ToString();
+            label4.Text = State.averageWaiting.ToString();
             label5.Text = State.ratioPassengers.ToString();
         }
 
@@ -54,16 +53,16 @@ namespace WindowsFormsApp
         {
             var sf = new SubwayForm();
             if (sf.ShowDialog() == DialogResult.OK)
-                city.subways.Add(sf.subway);
+                city.AddSubway(sf.subway);
             LoadData();
         }
 
         public void LoadData()
         {
             dataGridView2.Rows.Clear();
-            foreach (var subway in city.subways)
+            foreach (var subway in city.GetSubways())
             {
-                dataGridView2.Rows.Add(subway.Name, subway.freeSpace, subway.averageTransmittancePassengers);
+                dataGridView2.Rows.Add(subway.Name, subway.FreeSpace, subway.AverageTransmittancePassengers);
             }
         }
     }

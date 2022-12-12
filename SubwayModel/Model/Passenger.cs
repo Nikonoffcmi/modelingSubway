@@ -15,6 +15,7 @@ namespace SubwayModel.Model.Passengers
 
         public string Destination => _destination;
         public int SideTrain => _sideTrain;
+        public int TimeWaiting => _timeWaiting;
 
         public Passenger(List<string> listSubway, string currSubway)
         {
@@ -36,14 +37,14 @@ namespace SubwayModel.Model.Passengers
         public void TryEnterSubway(Subway subway)
         {
             if (!subway.AreAvailableSpace(this))
-                _timeWaiting += 10;
+                _timeWaiting += 30;
         }
 
         public bool TryEnterTrain(Train train)
         {
             if (!train.AreAvailableSeats(this))
             {
-                _timeWaiting += 10;
+                _timeWaiting += 30;
                 return false;
             }
             return true;

@@ -14,22 +14,12 @@ namespace SubwayModel.Model
         {
         }
 
-        override public Train EnterSubway(Subway subway)
+        public override bool IsTakeCorrectDirection(Passenger passenger)
         {
-            _passengers.RemoveAll(p => p.Destination == subway.Name);
-            return this;
-        }
-
-        override public bool AreAvailableSeats(Passenger passenger)
-        {
-            if (passenger.SideTrain == 2 && this._passengers.Count < _maxPassengers)
-            {
-                _passengers.Add(passenger);
+            if (passenger.SideTrain == 2)
                 return true;
-            }
             else
                 return false;
         }
-
     }
 }

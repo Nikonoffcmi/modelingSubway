@@ -18,8 +18,22 @@ namespace SubwayModel.Model
             _passengers = new List<Passenger>();
         }
 
-        public abstract Train EnterSubway(Subway subway);
+        public void EnterSubway(Subway subway)
+        {
+            _passengers.RemoveAll(p => p.Destination == subway.Name);
+        }
 
-        public abstract bool AreAvailableSeats(Passenger passenger);
+        public bool AreAvailableSeats(Passenger passenger)
+        {
+            if (_passengers.Count < _maxPassengers)
+            {
+                _passengers.Add(passenger);
+                return true;
+            }
+            else
+                return false;
+        }
+
+        public abstract bool IsTakeCorrectDirection(Passenger passenger);
     }
 }
