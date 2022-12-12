@@ -18,15 +18,8 @@ namespace SubwayModel.Model
             passengers = new List<Passenger>();
         }
 
-        public void EnterSubway(Subway subway)
-        {
-            subway.trains.Add(this);
-        }
+        public abstract void EnterSubway(Subway subway);
+
         public abstract void TakePassengers(List<Passenger> passengers, Subway subway);
-
-        public void LeavePassenger(Passenger passenger, Subway subway)
-        {
-
-        }
     }
 }

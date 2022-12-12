@@ -13,12 +13,17 @@ namespace SubwayModel.Model
         public TrainLeft(int maxPassengers) : base(maxPassengers)
         {
         }
+        override public void EnterSubway(Subway subway)
+        {
+            subway.LeftTrains.Add(this);
+            passengers.RemoveAll(p => p.destination == subway.Name);
+        }
 
         override public void TakePassengers(List<Passenger> passengers, Subway subway)
         {
             foreach (Passenger passenger in passengers)
             {
-                if (passenger.trainSide == 1 && this.passengers.Count < maxPassengers)
+                if (passenger.sideTrain == 1 && this.passengers.Count < maxPassengers)
                 {
                     this.passengers.Add(passenger);
                     subway.passengersWaitTrain.Remove(passenger);

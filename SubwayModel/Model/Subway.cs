@@ -10,69 +10,104 @@ namespace SubwayModel.Model
 {
     public class Subway
     {
+        public string Name { get; }
         public int freeSpace;
         public int departedPassengers;
         public int gonePassengers;
-
+        public int averageTransmittancePassengers;
+        public int averageTransmittanceTrains;
+        // интервал одинаков на всей лении 
         public Random random;
         public List<Passenger> passengersWaitTrain;
         public List<Passenger> passengersWaitEnter;
         public List<Passenger> passengersWaiting;
-        public List<Train> trains;
+        public List<TrainLeft> LeftTrains;
+        public List<TrainRight> RightTrains;
 
-        public Subway ()
+        public Subway (string name)
         {
+            Name = name;
             freeSpace = 10;
             departedPassengers = 0;
             gonePassengers = 0;
+            averageTransmittancePassengers = 10;
+            averageTransmittanceTrains = 5;
             random = new Random();
-            passengersWaitTrain = new List<Passenger> ();
-            passengersWaitEnter = new List<Passenger> ();
-            passengersWaiting = new List<Passenger> ();
-            trains = new List<Train> ();
-
+            passengersWaitTrain = new List<Passenger>();
+            passengersWaitEnter = new List<Passenger>();
+            passengersWaiting = new List<Passenger>();
+            LeftTrains = new List<TrainLeft>();
+            RightTrains = new List<TrainRight>();
         }
-        public void Simulation()
+
+        public List<TrainLeft> SimulationLeftSide(List<TrainLeft> LeftTrains)
         {
-            double time = 24 * 60 / State.simulationInterval;
-            for (int currTime = 0; currTime < time; currTime++)
+            this.LeftTrains.Clear();
+            if (LeftTrains.Count == 0)
             {
-                foreach (Passenger passenger in passengersWaitEnter.ToArray())
-                {
-                    passenger.EnterSubway(this);
-                }
-
-                for (int i = 0; i < random.Next(State.averageTransmittancePassengers/2, State.averageTransmittancePassengers); i++)
-                {
-                    new Passenger(random).EnterSubway(this);
-                }
-
-                for (int Minutes = 0; Minutes < State.simulationInterval; Minutes += State.averageTransmittanceTrains)
+                for (int Minutes = 0; Minutes < State.simulationInterval; Minutes += averageTransmittanceTrains)
                 {
                     new TrainLeft(4).EnterSubway(this);
-                    new TrainRight(4).EnterSubway(this);
                 }
-
-                foreach (var train in trains)
+            }
+            else
+            {
+                int i = 0;
+                for (int Minutes = 0; Minutes < State.simulationInterval; Minutes += averageTransmittanceTrains)
                 {
-                    var temp = new List<Passenger>(passengersWaitTrain);
-                    train.TakePassengers(temp, this);
+                    LeftTrains[i].EnterSubway(this);
+                    i++;
                 }
-
-                trains.Clear();
             }
 
-            passengersWaitEnter.ForEach(p => gonePassengers++);
-            passengersWaitEnter.Clear();
-            passengersWaitTrain.ForEach(p => gonePassengers++);
-            State.ratioGuests = departedPassengers * 100 / (departedPassengers + gonePassengers);
-            var l = new List<int>(passengersWaiting.Count);
-            passengersWaiting.ForEach(p => l.Add(p.timeWaiting));
-            if (l.Count > 0)
-                State.averageEnterWaiting = (int)Math.Round(l.Average());
+            foreach (var train in this.LeftTrains)
+            {
+                var temp = new List<Passenger>(passengersWaitTrain);
+                train.TakePassengers(temp, this);
+            }
+
+            return this.LeftTrains;
+        }
+
+        public List<TrainRight> SimulationRightSide(List<TrainRight> RightTrains)
+        {
+            this.RightTrains.Clear();
+            if (RightTrains.Count == 0)
+            {
+                for (int Minutes = 0; Minutes < State.simulationInterval; Minutes += averageTransmittanceTrains)
+                {
+                    new TrainRight(4).EnterSubway(this);
+                }
+            }
             else
-                State.averageEnterWaiting = 0;
-            passengersWaiting.Clear();
+            {
+                int i = 0;
+                for (int Minutes = 0; Minutes < State.simulationInterval; Minutes += averageTransmittanceTrains)
+                {
+                    RightTrains[i].EnterSubway(this);
+                    i++;
+                }
+            }
+
+            foreach (var train in this.RightTrains)
+            {
+                var temp = new List<Passenger>(passengersWaitTrain);
+                train.TakePassengers(temp, this);
+            }
+            return this.RightTrains;
+        }
+
+        public void PassengerEnter(List<string> listSubway, string currSubway)
+        {
+            foreach (Passenger passenger in passengersWaitEnter.ToArray())
+            {
+                passenger.EnterSubway(this);
+            }
+
+            for (int i = 0; i < random.Next(averageTransmittancePassengers / 2, averageTransmittancePassengers); i++)
+            {
+                new Passenger(random, listSubway, currSubway).EnterSubway(this);
+            }
         }
     }
 }

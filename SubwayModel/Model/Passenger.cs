@@ -9,12 +9,24 @@ namespace SubwayModel.Model.Passengers
     public class Passenger
     {
         public int timeWaiting { get; set; }
-        public int trainSide { get; }
+        public string destination { get; }
+        public int sideTrain { get; }
 
-        public Passenger(Random random)
+        public Passenger(Random random, List<string> listSubway, string currSubway)
         {
             timeWaiting = 0;
-            trainSide = random.Next(1,3);
+            destination = currSubway;
+            while (destination == currSubway)
+            {
+                destination = listSubway[random.Next(listSubway.Count)];
+            }
+
+            int id = listSubway.IndexOf(destination);
+            int idCurr = listSubway.IndexOf(currSubway);
+            if (id > idCurr)
+                sideTrain = 1;
+            else
+                sideTrain = 2;
         }
 
         public void EnterSubway(Subway subway)

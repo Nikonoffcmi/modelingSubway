@@ -20,10 +20,12 @@ namespace WindowsFormsApp
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var subway = new Subway();
+            var subway = new City();
+            subway.subways.Add(new Subway("de"));
+            subway.subways.Add(new Subway("gee"));
             subway.Simulation();
             label4.Text = State.averageEnterWaiting.ToString();
-            label5.Text = State.ratioGuests.ToString();
+            label5.Text = State.ratioPassengers.ToString();
         }
     }
 }
