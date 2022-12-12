@@ -13,22 +13,20 @@ namespace WindowsFormsApp
 {
     public partial class Main : Form
     {
-        City city;
         public Main()
         {
             InitializeComponent();
             DefaultSettings();
-            city = new City();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            State.simulationTime = Convert.ToInt32(numericUpDown1.Value);
-            State.simulationInterval = Convert.ToInt32(numericUpDown2.Value);
-            State.averageTransmittanceTrains = Convert.ToInt32(numericUpDown3.Value);
-            State.TrainsCapacity = Convert.ToInt32(numericUpDown4.Value);
+            Settings.simulationTime = Convert.ToInt32(numericUpDown1.Value);
+            Settings.averageTransmittanceTrains = Convert.ToInt32(numericUpDown3.Value);
+            Settings.TrainsCapacity = Convert.ToInt32(numericUpDown4.Value);
             try
             {
+                var city = new City(Settings.Subways);
                 city.Simulation();
             }
             catch (Exception ex)
@@ -37,30 +35,30 @@ namespace WindowsFormsApp
                     $"Details:\n\n{ex.StackTrace}");
                 DialogResult = DialogResult.None;
             }
-            label4.Text = State.averageWaiting.ToString();
-            label5.Text = State.ratioPassengers.ToString();
+            label4.Text = Statistics.averageWaiting.ToString();
+            label5.Text = Statistics.ratioPassengers.ToString();
         }
 
         private void DefaultSettings()
         {
-            numericUpDown1.Value = State.simulationTime;
-            numericUpDown2.Value = State.simulationInterval;
-            numericUpDown3.Value = State.averageTransmittanceTrains;
-            numericUpDown4.Value = State.TrainsCapacity;
+            numericUpDown1.Value = Settings.simulationTime;
+            numericUpDown3.Value = Settings.averageTransmittanceTrains;
+            numericUpDown4.Value = Settings.TrainsCapacity;
+            LoadData();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             var sf = new SubwayForm();
             if (sf.ShowDialog() == DialogResult.OK)
-                city.AddSubway(sf.subway);
+                Settings.Subways.Add(sf.subway);
             LoadData();
         }
 
         public void LoadData()
         {
             dataGridView2.Rows.Clear();
-            foreach (var subway in city.GetSubways())
+            foreach (var subway in Settings.Subways)
             {
                 dataGridView2.Rows.Add(subway.Name, subway.FreeSpace, subway.AverageTransmittancePassengers);
             }

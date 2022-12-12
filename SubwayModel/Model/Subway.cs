@@ -70,7 +70,7 @@ namespace SubwayModel.Model
                 passenger.TryEnterSubway(this);
             }
 
-            var newPassengers = State.random.Next((int)Math.Round(_averageTransmittancePassengers * 0.9),
+            var newPassengers = Settings.random.Next((int)Math.Round(_averageTransmittancePassengers * 0.9),
                 (int)Math.Round(_averageTransmittancePassengers * 1.1));
             for (int i = 0; i < newPassengers; i++)
             {
@@ -114,12 +114,15 @@ namespace SubwayModel.Model
             _passengersWaitEnter.ForEach(p => _gonePassengers++);
             _passengersWaitEnter.Clear();
             _passengersWaitTrain.ForEach(p => _gonePassengers++);
-            State.ratioSubwayPassengers.Add(_departedPassengers * 100 / (_departedPassengers + _gonePassengers));
+            Statistics.ratioSubwayPassengers.Add(_departedPassengers * 100 / (_departedPassengers + _gonePassengers));
             if (_waitingTime.Count > 0)
-                State.averageSubwayWaiting.Add((int)Math.Round(_waitingTime.Average()));
+                Statistics.averageSubwayWaiting.Add((int)Math.Round(_waitingTime.Average()));
             else
-                State.averageSubwayWaiting.Add(0);
+                Statistics.averageSubwayWaiting.Add(0);
             _waitingTime.Clear();
+            _passengersWaitTrain.Clear();
+            _departedPassengers = 0;
+            _gonePassengers = 0;
         }
     }
 }

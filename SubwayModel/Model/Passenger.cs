@@ -23,7 +23,7 @@ namespace SubwayModel.Model.Passengers
             _destination = currSubway;
             while (_destination == currSubway)
             {
-                _destination = listSubway[State.random.Next(listSubway.Count)];
+                _destination = listSubway[Settings.random.Next(listSubway.Count)];
             }
 
             int id = listSubway.IndexOf(_destination);
@@ -37,14 +37,14 @@ namespace SubwayModel.Model.Passengers
         public void TryEnterSubway(Subway subway)
         {
             if (!subway.AreAvailableSpace(this))
-                _timeWaiting += 30;
+                _timeWaiting += 5;
         }
 
         public bool TryEnterTrain(Train train)
         {
             if (!train.AreAvailableSeats(this))
             {
-                _timeWaiting += 30;
+                _timeWaiting += 5;
                 return false;
             }
             return true;
@@ -52,7 +52,7 @@ namespace SubwayModel.Model.Passengers
 
         public bool TryLeaveSubway()
         {
-            if (State.random.Next(0, 3) == 1)
+            if (Settings.random.Next(0, 3) == 1)
                 return true;
             else
                 return false;

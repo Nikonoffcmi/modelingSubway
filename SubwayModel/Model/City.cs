@@ -13,20 +13,19 @@ namespace SubwayModel.Model
         private List<TrainLeft> _leftTrains;
         private List<TrainRight> _rightTrains;
 
-        public City ()
+        public City (List<Subway> subways)
         {
-            _subways = new List<Subway> ();
+            _subways = subways;
             _leftTrains = new List<TrainLeft> ();
             _rightTrains = new List<TrainRight> ();
         }
 
         public void Simulation()
         {
-            State.averageSubwayWaiting.Clear();
-            State.ratioSubwayPassengers.Clear();
+            Statistics.averageSubwayWaiting.Clear();
+            Statistics.ratioSubwayPassengers.Clear();
 
-            double time = 6 * 60 / State.simulationInterval;
-            for (int currTime = 0; currTime < time; currTime++)
+            for (int currTime = 0; currTime < Settings.simulationTime * 60; currTime += Settings.averageTransmittanceTrains)
             {
                 LeftSide();
 
@@ -38,15 +37,15 @@ namespace SubwayModel.Model
                 subway.CalculateStatistics();
             }
 
-            if (State.averageSubwayWaiting.Count > 0)
-                State.averageWaiting = (int)Math.Round(State.averageSubwayWaiting.Average());
+            if (Statistics.averageSubwayWaiting.Count > 0)
+                Statistics.averageWaiting = (int)Math.Round(Statistics.averageSubwayWaiting.Average());
             else
-                State.averageWaiting = 0;
+                Statistics.averageWaiting = 0;
 
-            if (State.ratioSubwayPassengers.Count > 0)
-                State.ratioPassengers = Math.Round(State.ratioSubwayPassengers.Average());
+            if (Statistics.ratioSubwayPassengers.Count > 0)
+                Statistics.ratioPassengers = Math.Round(Statistics.ratioSubwayPassengers.Average());
             else
-                State.ratioPassengers = 0;
+                Statistics.ratioPassengers = 0;
         }
 
         public void AddSubway(Subway subway)
@@ -67,9 +66,9 @@ namespace SubwayModel.Model
             {
                 if (_leftTrains.Count == 0)
                 {
-                    for (int Minutes = 0; Minutes < State.simulationInterval; Minutes += State.averageTransmittanceTrains)
+                    for (int Minutes = 0; Minutes < 60; Minutes += Settings.averageTransmittanceTrains)
                     {
-                        _leftTrains.Add(new TrainLeft(State.TrainsCapacity));
+                        _leftTrains.Add(new TrainLeft(Settings.TrainsCapacity));
                     }
                 }
                 else
@@ -91,9 +90,9 @@ namespace SubwayModel.Model
             {
                 if (_rightTrains.Count == 0)
                 {
-                    for (int Minutes = 0; Minutes < State.simulationInterval; Minutes += State.averageTransmittanceTrains)
+                    for (int Minutes = 0; Minutes < 60; Minutes += Settings.averageTransmittanceTrains)
                     {
-                        _rightTrains.Add(new TrainRight(State.TrainsCapacity));
+                        _rightTrains.Add(new TrainRight(Settings.TrainsCapacity));
                     }
                 }
                 else

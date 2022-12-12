@@ -6,13 +6,22 @@ using System.Threading.Tasks;
 
 namespace SubwayModel.Model
 {
-    static public class State
+    static public class Settings
     {
         static public Random random = new Random();
-        static public int simulationInterval = 60;
         static public int simulationTime = 5;
         static public int averageTransmittanceTrains = 10;
-        static public int TrainsCapacity = 4;
+        static public int TrainsCapacity = 5;
+        static public List<Subway> Subways = new List<Subway>()
+        {
+            new Subway("кет", 15, 15),
+            new Subway("diyb", 8, 8),
+            new Subway("linq", 15, 11),
+        };
+    }
+
+    static public class Statistics
+    {
         static public List<int> averageSubwayWaiting = new List<int>();
         static public int averageWaiting;
         static public List<double> ratioSubwayPassengers = new List<double>();
