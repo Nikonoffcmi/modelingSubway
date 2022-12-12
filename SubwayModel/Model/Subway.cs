@@ -15,8 +15,6 @@ namespace SubwayModel.Model
         public int departedPassengers;
         public int gonePassengers;
         public int averageTransmittancePassengers;
-        public int averageTransmittanceTrains;
-        // интервал одинаков на всей лении 
         public Random random;
         public List<Passenger> passengersWaitTrain;
         public List<Passenger> passengersWaitEnter;
@@ -24,14 +22,13 @@ namespace SubwayModel.Model
         public List<TrainLeft> LeftTrains;
         public List<TrainRight> RightTrains;
 
-        public Subway (string name)
+        public Subway (string name, int freeSpace, int averageTransmittancePassengers)
         {
             Name = name;
-            freeSpace = 10;
-            departedPassengers = 0;
+            this.freeSpace = freeSpace;
+            departedPassengers = 1;
             gonePassengers = 0;
-            averageTransmittancePassengers = 10;
-            averageTransmittanceTrains = 5;
+            this.averageTransmittancePassengers = averageTransmittancePassengers;
             random = new Random();
             passengersWaitTrain = new List<Passenger>();
             passengersWaitEnter = new List<Passenger>();
@@ -45,15 +42,15 @@ namespace SubwayModel.Model
             this.LeftTrains.Clear();
             if (LeftTrains.Count == 0)
             {
-                for (int Minutes = 0; Minutes < State.simulationInterval; Minutes += averageTransmittanceTrains)
+                for (int Minutes = 0; Minutes < State.simulationInterval; Minutes += State.averageTransmittanceTrains)
                 {
-                    new TrainLeft(4).EnterSubway(this);
+                    new TrainLeft(State.TrainsCapacity).EnterSubway(this);
                 }
             }
             else
             {
                 int i = 0;
-                for (int Minutes = 0; Minutes < State.simulationInterval; Minutes += averageTransmittanceTrains)
+                for (int Minutes = 0; Minutes < State.simulationInterval; Minutes += State.averageTransmittanceTrains)
                 {
                     LeftTrains[i].EnterSubway(this);
                     i++;
@@ -74,15 +71,15 @@ namespace SubwayModel.Model
             this.RightTrains.Clear();
             if (RightTrains.Count == 0)
             {
-                for (int Minutes = 0; Minutes < State.simulationInterval; Minutes += averageTransmittanceTrains)
+                for (int Minutes = 0; Minutes < State.simulationInterval; Minutes += State.averageTransmittanceTrains)
                 {
-                    new TrainRight(4).EnterSubway(this);
+                    new TrainRight(State.TrainsCapacity).EnterSubway(this);
                 }
             }
             else
             {
                 int i = 0;
-                for (int Minutes = 0; Minutes < State.simulationInterval; Minutes += averageTransmittanceTrains)
+                for (int Minutes = 0; Minutes < State.simulationInterval; Minutes += State.averageTransmittanceTrains)
                 {
                     RightTrains[i].EnterSubway(this);
                     i++;

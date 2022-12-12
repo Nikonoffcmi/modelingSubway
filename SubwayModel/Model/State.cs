@@ -10,6 +10,8 @@ namespace SubwayModel.Model
     {
         static public int simulationInterval = 60;
         static public int simulationTime = 5;
+        static public int averageTransmittanceTrains = 10;
+        static public int TrainsCapacity = 4;
         static public int averageEnterWaiting = 0;
         static public double ratioPassengers = .0f;
     }

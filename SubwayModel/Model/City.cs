@@ -24,7 +24,7 @@ namespace SubwayModel.Model
 
         public void Simulation()
         {
-            double time = 24 * 60 / State.simulationInterval;
+            double time = 60 / State.simulationInterval;
             for (int currTime = 0; currTime < time; currTime++)
             {
                 for (int i = 0; i < subways.Count; i++)
@@ -39,7 +39,6 @@ namespace SubwayModel.Model
 
                 for (int i = subways.Count - 1; i >= 0; i--)
                 {
-                    subways[i].PassengerEnter(subways.Select(s => s.Name).ToList(), subways[i].Name);
 
                     var temp = subways[i].SimulationRightSide(RightTrains);
                     RightTrains.Clear();

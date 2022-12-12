@@ -11,21 +11,21 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApp
 {
-    public partial class Form1 : Form
+    public partial class SubwayForm : Form
     {
-        public Form1()
+        public Subway subway { get; set; }
+        public SubwayForm()
         {
             InitializeComponent();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var subway = new City();
-            subway.subways.Add(new Subway("de"));
-            subway.subways.Add(new Subway("gee"));
-            subway.Simulation();
-            label4.Text = State.averageEnterWaiting.ToString();
-            label5.Text = State.ratioPassengers.ToString();
+            var name = textBox1.Text;
+            var freeSpace = Convert.ToInt32(numericUpDown1.Value);
+            var averageTransmittancePassengers = Convert.ToInt32(numericUpDown2.Value);
+            subway = new Subway(name, freeSpace, averageTransmittancePassengers);
+            Close();
         }
     }
 }
