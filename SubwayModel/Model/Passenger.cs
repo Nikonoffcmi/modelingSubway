@@ -8,64 +8,50 @@ namespace SubwayModel.Model.Passengers
 {
     public class Passenger
     {
-        public int timeWaiting { get; set; }
-        public string destination { get; }
-        public int sideTrain { get; }
 
-        public Passenger(Random random, List<string> listSubway, string currSubway)
+        private int _timeWaiting;
+        private string _destination;
+        private int _sideTrain;
+
+        public string Destination => _destination;
+        public int SideTrain => _sideTrain;
+
+        public Passenger(List<string> listSubway, string currSubway)
         {
-            timeWaiting = 0;
-            destination = currSubway;
-            while (destination == currSubway)
+            _timeWaiting = 0;
+            _destination = currSubway;
+            while (_destination == currSubway)
             {
-                destination = listSubway[random.Next(listSubway.Count)];
+                _destination = listSubway[State.random.Next(listSubway.Count)];
             }
 
-            int id = listSubway.IndexOf(destination);
+            int id = listSubway.IndexOf(_destination);
             int idCurr = listSubway.IndexOf(currSubway);
             if (id > idCurr)
-                sideTrain = 1;
+                _sideTrain = 1;
             else
-                sideTrain = 2;
+                _sideTrain = 2;
         }
 
-        public void EnterSubway(Subway subway)
+        public void TryEnterSubway(Subway subway)
         {
-            if (subway.freeSpace > 0)
-            {
-                subway.freeSpace -= 1;
-                subway.passengersWaitTrain.Add(this);
-                subway.passengersWaitEnter.Remove(this);
-            }
-            else
-            {
-                if (!subway.passengersWaitEnter.Contains(this))
-                    subway.passengersWaitEnter.Add(this);
-                else
-                {
-                    if (subway.passengersWaiting.Contains(this))
-                    {
-                        if (LeaveSubway(subway.random))
-                        {
-                            subway.passengersWaitEnter.Remove(this);
-                            subway.gonePassengers += 1;
-                        }
-                        else
-                            timeWaiting += 30;
-
-                    }
-                    else
-                    {
-                        timeWaiting += 30;
-                        subway.passengersWaiting.Add(this);
-                    }
-                }
-            }
+            if (!subway.AreAvailableSpace(this))
+                _timeWaiting += 10;
         }
 
-        public bool LeaveSubway(Random rnd)
+        public bool TryEnterTrain(Train train)
         {
-            if (rnd.Next(0, 2) == 1)
+            if (!train.AreAvailableSeats(this))
+            {
+                _timeWaiting += 10;
+                return false;
+            }
+            return true;
+        }
+
+        public bool TryLeaveSubway()
+        {
+            if (State.random.Next(0, 3) == 1)
                 return true;
             else
                 return false;

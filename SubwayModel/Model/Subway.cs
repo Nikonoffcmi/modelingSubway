@@ -10,41 +10,40 @@ namespace SubwayModel.Model
 {
     public class Subway
     {
-        public string Name { get; }
-        public int freeSpace;
-        public int departedPassengers;
-        public int gonePassengers;
-        public int averageTransmittancePassengers;
-        public Random random;
-        public List<Passenger> passengersWaitTrain;
-        public List<Passenger> passengersWaitEnter;
-        public List<Passenger> passengersWaiting;
-        public List<TrainLeft> LeftTrains;
-        public List<TrainRight> RightTrains;
+        private string _name { get; }
+        private int _freeSpace;
+        private int _departedPassengers;
+        private int _gonePassengers;
+        private int _averageTransmittancePassengers;
+        private List<Passenger> _passengersWaitTrain;
+        private List<Passenger> _passengersWaitEnter;
+        private List<TrainLeft> _leftTrains;
+        private List<TrainRight> _rightTrains;
+
+        public string Name => _name;
+        public int FreeSpace => _freeSpace;
 
         public Subway (string name, int freeSpace, int averageTransmittancePassengers)
         {
-            Name = name;
-            this.freeSpace = freeSpace;
-            departedPassengers = 1;
-            gonePassengers = 0;
-            this.averageTransmittancePassengers = averageTransmittancePassengers;
-            random = new Random();
-            passengersWaitTrain = new List<Passenger>();
-            passengersWaitEnter = new List<Passenger>();
-            passengersWaiting = new List<Passenger>();
-            LeftTrains = new List<TrainLeft>();
-            RightTrains = new List<TrainRight>();
+            _name = name;
+            _freeSpace = freeSpace;
+            _departedPassengers = 0;
+            _gonePassengers = 0;
+            _averageTransmittancePassengers = averageTransmittancePassengers;
+            _passengersWaitTrain = new List<Passenger>();
+            _passengersWaitEnter = new List<Passenger>();
+            _leftTrains = new List<TrainLeft>();
+            _rightTrains = new List<TrainRight>();
         }
 
         public List<TrainLeft> SimulationLeftSide(List<TrainLeft> LeftTrains)
         {
-            this.LeftTrains.Clear();
+            _leftTrains.Clear();
             if (LeftTrains.Count == 0)
             {
                 for (int Minutes = 0; Minutes < State.simulationInterval; Minutes += State.averageTransmittanceTrains)
                 {
-                    new TrainLeft(State.TrainsCapacity).EnterSubway(this);
+                    _leftTrains.Add(new TrainLeft(State.TrainsCapacity).EnterSubway(this));
                 }
             }
             else
@@ -57,18 +56,28 @@ namespace SubwayModel.Model
                 }
             }
 
-            foreach (var train in this.LeftTrains)
+            foreach (var train in _leftTrains)
             {
-                var temp = new List<Passenger>(passengersWaitTrain);
-                train.TakePassengers(temp, this);
+                var temp = new List<Passenger>(_passengersWaitTrain);
+                foreach (var passenger in temp)
+                {
+                    if (!passenger.TryEnterTrain(train))
+                    {
+                        if (passenger.TryLeaveSubway())
+                            _passengersWaitTrain.Remove(passenger);
+                    }
+                    else
+                        _passengersWaitTrain.Remove(passenger);
+
+                }
             }
 
-            return this.LeftTrains;
+            return _leftTrains;
         }
 
         public List<TrainRight> SimulationRightSide(List<TrainRight> RightTrains)
         {
-            this.RightTrains.Clear();
+            this._rightTrains.Clear();
             if (RightTrains.Count == 0)
             {
                 for (int Minutes = 0; Minutes < State.simulationInterval; Minutes += State.averageTransmittanceTrains)
@@ -86,24 +95,66 @@ namespace SubwayModel.Model
                 }
             }
 
-            foreach (var train in this.RightTrains)
+            foreach (var train in _rightTrains)
             {
-                var temp = new List<Passenger>(passengersWaitTrain);
-                train.TakePassengers(temp, this);
+                var temp = new List<Passenger>(_passengersWaitTrain);
+                foreach (var passenger in temp)
+                {
+                    if (!passenger.TryEnterTrain(train))
+                    {
+                        if (passenger.TryLeaveSubway())
+                            _passengersWaitTrain.Remove(passenger);
+                    }
+                    else
+                        _passengersWaitTrain.Remove(passenger);
+
+                }
             }
-            return this.RightTrains;
+
+            return _rightTrains;
         }
 
         public void PassengerEnter(List<string> listSubway, string currSubway)
         {
-            foreach (Passenger passenger in passengersWaitEnter.ToArray())
+            foreach (Passenger passenger in _passengersWaitEnter.ToArray())
             {
-                passenger.EnterSubway(this);
+                passenger.TryEnterSubway(this);
             }
 
-            for (int i = 0; i < random.Next(averageTransmittancePassengers / 2, averageTransmittancePassengers); i++)
+            for (int i = 0; i < State.random.Next(_averageTransmittancePassengers / 2, _averageTransmittancePassengers); i++)
             {
-                new Passenger(random, listSubway, currSubway).EnterSubway(this);
+                new Passenger(listSubway, currSubway).TryEnterSubway(this);
+            }
+        }
+
+        public bool AreAvailableSpace(Passenger passenger)
+        {
+            if (_freeSpace > 0)
+            {
+                _freeSpace -= 1;
+                _passengersWaitTrain.Add(passenger);
+                _passengersWaitEnter.Remove(passenger);
+                return true;
+            }
+            else
+            {
+                if (_passengersWaitEnter.Contains(passenger))
+                {
+                    if (passenger.TryLeaveSubway())
+                    {
+                        _passengersWaitEnter.Remove(passenger);
+                        _gonePassengers += 1;
+                        return false;
+                    }
+                    else
+                        return false;
+
+                }
+                else
+                {
+                    _passengersWaitEnter.Add(passenger);
+                    return false;
+                }
             }
         }
     }

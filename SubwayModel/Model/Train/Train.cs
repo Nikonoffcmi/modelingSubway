@@ -9,17 +9,17 @@ namespace SubwayModel.Model
 {
     public abstract class Train
     {
-        public int maxPassengers { get;}
-        public List<Passenger> passengers { get; set; }
+        protected int _maxPassengers;
+        protected List<Passenger> _passengers;
 
         public Train(int maxPassengers)
         {
-            this.maxPassengers = maxPassengers;
-            passengers = new List<Passenger>();
+            this._maxPassengers = maxPassengers;
+            _passengers = new List<Passenger>();
         }
 
-        public abstract void EnterSubway(Subway subway);
+        public abstract Train EnterSubway(Subway subway);
 
-        public abstract void TakePassengers(List<Passenger> passengers, Subway subway);
+        public abstract bool AreAvailableSeats(Passenger passenger);
     }
 }

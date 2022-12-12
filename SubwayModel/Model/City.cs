@@ -9,17 +9,15 @@ namespace SubwayModel.Model
 {
     public class City
     {
-        public List<Subway> subways;
-        public List<TrainLeft> LeftTrains;
-        public List<TrainRight> RightTrains;
-        public List<List<Train>> WaitingTrains;
+        private List<Subway> _subways;
+        private List<TrainLeft> _leftTrains;
+        private List<TrainRight> _rightTrains;
 
         public City ()
         {
-            subways = new List<Subway> ();
-            LeftTrains = new List<TrainLeft> ();
-            RightTrains = new List<TrainRight> ();
-            WaitingTrains = new List<List<Train>> ();
+            _subways = new List<Subway> ();
+            _leftTrains = new List<TrainLeft> ();
+            _rightTrains = new List<TrainRight> ();
         }
 
         public void Simulation()
@@ -27,32 +25,32 @@ namespace SubwayModel.Model
             double time = 60 / State.simulationInterval;
             for (int currTime = 0; currTime < time; currTime++)
             {
-                for (int i = 0; i < subways.Count; i++)
+                for (int i = 0; i < _subways.Count; i++)
                 {
-                    subways[i].PassengerEnter(subways.Select(s => s.Name).ToList(), subways[i].Name);
+                    _subways[i].PassengerEnter(_subways.Select(s => s._name).ToList(), _subways[i]._name);
                     
-                    var temp = subways[i].SimulationLeftSide(LeftTrains);
-                    LeftTrains.Clear();
-                    LeftTrains.AddRange(temp);
+                    var temp = _subways[i].SimulationLeftSide(_leftTrains);
+                    _leftTrains.Clear();
+                    _leftTrains.AddRange(temp);
                 }
-                LeftTrains.Clear();
+                _leftTrains.Clear();
 
-                for (int i = subways.Count - 1; i >= 0; i--)
+                for (int i = _subways.Count - 1; i >= 0; i--)
                 {
 
-                    var temp = subways[i].SimulationRightSide(RightTrains);
-                    RightTrains.Clear();
-                    RightTrains.AddRange(temp);
+                    var temp = _subways[i].SimulationRightSide(_rightTrains);
+                    _rightTrains.Clear();
+                    _rightTrains.AddRange(temp);
                 }
-                RightTrains.Clear();
+                _rightTrains.Clear();
             }
 
-            foreach (var subway in subways)
+            foreach (var subway in _subways)
             {
-                subway.passengersWaitEnter.ForEach(p => subway.gonePassengers++);
+                subway.passengersWaitEnter.ForEach(p => subway._gonePassengers++);
                 subway.passengersWaitEnter.Clear();
-                subway.passengersWaitTrain.ForEach(p => subway.gonePassengers++);
-                State.ratioPassengers = subway.departedPassengers * 100 / (subway.departedPassengers + subway.gonePassengers);
+                subway.passengersWaitTrain.ForEach(p => subway._gonePassengers++);
+                State.ratioPassengers = subway._departedPassengers * 100 / (subway._departedPassengers + subway._gonePassengers);
                 var l = new List<int>(subway.passengersWaiting.Count);
                 subway.passengersWaiting.ForEach(p => l.Add(p.timeWaiting));
                 if (l.Count > 0)

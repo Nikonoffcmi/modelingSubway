@@ -8,6 +8,7 @@ namespace SubwayModel.Model
 {
     static public class State
     {
+        static public Random random = new Random();
         static public int simulationInterval = 60;
         static public int simulationTime = 5;
         static public int averageTransmittanceTrains = 10;
