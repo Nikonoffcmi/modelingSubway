@@ -14,15 +14,16 @@ namespace SubwayModel.Model
         private int _averageTransmittancePassengers;
         private List<Passenger> _passengersWaitTrain;
         private List<int> _waitingTime;
-        public int _passengers;
+        private int _notPlacedTrainPassengers;
 
         public string Name => _name;
         public int AverageTransmittancePassengers => _averageTransmittancePassengers;
+        public int NotPlacedTrainPassengers { get => _notPlacedTrainPassengers; set => _notPlacedTrainPassengers = 0; }
 
         public Subway (string name, int averageTransmittancePassengers)
         {
             _name = name;
-            _passengers = 0;
+            _notPlacedTrainPassengers = 0;
             _averageTransmittancePassengers = averageTransmittancePassengers;
             _passengersWaitTrain = new List<Passenger>();
             _waitingTime = new List<int>();
@@ -34,8 +35,7 @@ namespace SubwayModel.Model
             foreach (var passenger in temp)
             {
                 if (!passenger.TryEnterTrain(train))
-                {                 
-                }
+                    _notPlacedTrainPassengers++;
                 else
                 {
                     _passengersWaitTrain.Remove(passenger);
@@ -47,15 +47,15 @@ namespace SubwayModel.Model
         public void PassengerEnter(List<string> listSubway)
         {
             var newPassengers = Settings.random.Next(
-                (int)Math.Round(_averageTransmittancePassengers * 0.85 / (60 / Settings.simulationInterval) / (Settings.simulationInterval / Settings.averageTransmittanceTrains)),
-                (int)Math.Round(_averageTransmittancePassengers * 1.15 / (60 / Settings.simulationInterval) / (Settings.simulationInterval / Settings.averageTransmittanceTrains)));
+                (int)Math.Round(_averageTransmittancePassengers * 0.85 / (60 / Settings.averageTransmittanceTrains)),
+                (int)Math.Round(_averageTransmittancePassengers * 1.15 / (60 / Settings.averageTransmittanceTrains)));
+
             for (int i = 0; i < newPassengers; i++)
             {
                 if (Settings.random.Next(0, 10) == 1)
                     _passengersWaitTrain.Add(new PassengerLuggage(listSubway, _name));
                 else
                     _passengersWaitTrain.Add(new OrdinaryPassenger(listSubway, _name));
-                _passengers++;
             }
         }
 

@@ -17,14 +17,10 @@ namespace SubwayModel.Model.Passengers
         public int TimeWaiting => _timeWaiting;
         public int TakesSpace => _takesSpace;
 
-        public Passenger(List<string> listSubway, string currSubway)
+        public Passenger(List<string> listSubway)
         {
             _timeWaiting = 0;
-            _destination = currSubway;
-            while (_destination == currSubway)
-            {
-                _destination = listSubway[Settings.random.Next(listSubway.Count)];
-            }
+            _destination = listSubway[Settings.random.Next(listSubway.Count)];
         }
 
         public bool TryEnterTrain(Train train)

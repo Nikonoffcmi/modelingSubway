@@ -11,12 +11,12 @@ namespace SubwayModel.Model
     public class City
     {
         private List<Subway> _subways;
-        private List<Train> trains;
+        private List<Train> _trains;
 
         public City (List<Subway> subways)
         {
             _subways = subways;
-            trains = new List<Train> ();
+            _trains = new List<Train> ();
         }
 
         public void Simulation()
@@ -24,11 +24,10 @@ namespace SubwayModel.Model
             Statistics.averageSubwayWaiting.Clear();
             Statistics.ratioSubwayPassengers.Clear();
 
-            for (int currTime = 0; currTime < Settings.simulationTime * 60; currTime += Settings.simulationInterval)
+            for (int currTime = 0; currTime < Settings.simulationTime; currTime ++)
             {
-                
                 LeftSide();
-
+                Statistics.ratioSubwayPassengers.RemoveAt(Statistics.ratioSubwayPassengers.Count - 1);
             }
 
             foreach (var subway in _subways)
@@ -36,6 +35,7 @@ namespace SubwayModel.Model
                 subway.CalculateStatistics();
             }
 
+            Statistics.averageSubwayWaiting.RemoveAt(_subways.Count - 1);
             if (Statistics.averageSubwayWaiting.Count > 0)
                 Statistics.averageWaiting = (int)Math.Round(Statistics.averageSubwayWaiting.Average());
             else
@@ -51,29 +51,32 @@ namespace SubwayModel.Model
         {
             for (int i = 0; i < _subways.Count; i++)
             {
-                if (trains.Count == 0)
+                var SubwayNames = _subways.Select(s => s.Name).ToList();
+                SubwayNames.RemoveRange(0, i + 1);
+                if (_trains.Count == 0)
                 {
-                    for (int Minutes = 0; Minutes < Settings.simulationInterval; Minutes += Settings.averageTransmittanceTrains)
+                    for (int Minutes = 0; Minutes < 60; Minutes += Settings.averageTransmittanceTrains)
                     {
                         var train = new Train(Settings.TrainsCapacity);
-                        _subways[i].PassengerEnter(_subways.Select(s => s.Name).ToList());
+                        _subways[i].PassengerEnter(SubwayNames);
                         _subways[i].Simulation(train);
-                        trains.Add(new Train(Settings.TrainsCapacity));
+                        _trains.Add(train);
                     }
                 }
                 else
                 {
-                    for (int id = 0; id < trains.Count; id ++)
+                    for (int j = 0; j < _trains.Count; j ++)
                     {
-                        trains[id].EnterSubway(_subways[i]);
-                        _subways[i].PassengerEnter(_subways.Select(s => s.Name).ToList());
-                        _subways[i].Simulation(trains[id]);
+                        _trains[j].EnterSubway(_subways[i]);
+                        if (i+1 != _subways.Count)
+                            _subways[i].PassengerEnter(SubwayNames);
+                        _subways[i].Simulation(_trains[j]);
                     }
                 }
-                Statistics.ratioSubwayPassengers.Add(_subways[i]._passengers);
-                _subways[i]._passengers = 0;
-            }
-            trains.Clear();
+                Statistics.ratioSubwayPassengers.Add(_subways[i].NotPlacedTrainPassengers);
+                _subways[i].NotPlacedTrainPassengers = 0;
+            }            
+            _trains.Clear();
         }
     }
 }

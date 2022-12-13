@@ -9,7 +9,7 @@ namespace SubwayModel.Model.Passengers
     public class OrdinaryPassenger
         : Passenger
     {
-        public OrdinaryPassenger(List<string> listSubway, string currSubway) : base(listSubway, currSubway)
+        public OrdinaryPassenger(List<string> listSubway, string currSubway) : base(listSubway)
         {
             _takesSpace = 1;
         }

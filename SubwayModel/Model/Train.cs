@@ -11,13 +11,11 @@ namespace SubwayModel.Model
     {
         private int _maxCapacity;
         private List<Passenger> _passengers;
-        private int _totalCapacity;
 
         public Train(int maxCapacity)
         {
             _maxCapacity = maxCapacity;
             _passengers = new List<Passenger>();
-            _totalCapacity = 0;
         }
 
         public void EnterSubway(Subway subway)
@@ -27,11 +25,10 @@ namespace SubwayModel.Model
 
         public bool AreAvailableSeats(Passenger passenger)
         {
-            var newCapacity = _totalCapacity + passenger.TakesSpace;
-            if (newCapacity < _maxCapacity)
+            var newCapacity = _passengers.Select(p => p.TakesSpace).ToArray().Sum() + passenger.TakesSpace;
+            if (newCapacity <= _maxCapacity)
             {
                 _passengers.Add(passenger);
-                _totalCapacity += passenger.TakesSpace;
                 return true;
             }
             else
