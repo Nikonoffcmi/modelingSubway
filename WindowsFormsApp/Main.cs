@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace WindowsFormsApp
 {
@@ -21,6 +22,8 @@ namespace WindowsFormsApp
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //chart1.Series[0].Points.Clear();
+            //chart2.Series[0].Points.Clear();
             Settings.simulationTime = Convert.ToInt32(numericUpDown1.Value);
             Settings.averageTransmittanceTrains = Convert.ToInt32(numericUpDown3.Value);
             Settings.TrainsCapacity = Convert.ToInt32(numericUpDown4.Value);
@@ -37,6 +40,11 @@ namespace WindowsFormsApp
             }
             label4.Text = Statistics.averageWaiting.ToString();
             label5.Text = Statistics.ratioPassengers.ToString();
+            //for (int i = 0; i < Settings.Subways.Count; i++)
+            //{
+            //    chart1.Series[0].Points.AddXY(i, Statistics.ratioSubwayPassengers[i]);
+            //    chart2.Series[0].Points.AddXY(i, Statistics.averageSubwayWaiting[i]);
+            //}
         }
 
         private void DefaultSettings()
@@ -63,5 +71,6 @@ namespace WindowsFormsApp
                 dataGridView2.Rows.Add(subway.Name, subway.AverageTransmittancePassengers);
             }
         }
+
     }
 }

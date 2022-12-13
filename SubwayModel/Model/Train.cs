@@ -7,15 +7,17 @@ using SubwayModel.Model.Passengers;
 
 namespace SubwayModel.Model
 {
-    public abstract class Train
+    public class Train
     {
-        protected int _maxPassengers;
-        protected List<Passenger> _passengers;
+        private int _maxCapacity;
+        private List<Passenger> _passengers;
+        private int _totalCapacity;
 
-        public Train(int maxPassengers)
+        public Train(int maxCapacity)
         {
-            this._maxPassengers = maxPassengers;
+            _maxCapacity = maxCapacity;
             _passengers = new List<Passenger>();
+            _totalCapacity = 0;
         }
 
         public void EnterSubway(Subway subway)
@@ -25,15 +27,15 @@ namespace SubwayModel.Model
 
         public bool AreAvailableSeats(Passenger passenger)
         {
-            if (_passengers.Count < _maxPassengers)
+            var newCapacity = _totalCapacity + passenger.TakesSpace;
+            if (newCapacity < _maxCapacity)
             {
                 _passengers.Add(passenger);
+                _totalCapacity += passenger.TakesSpace;
                 return true;
             }
             else
                 return false;
         }
-
-        public abstract bool IsTakeCorrectDirection(Passenger passenger);
     }
 }
