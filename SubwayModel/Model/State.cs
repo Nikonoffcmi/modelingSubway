@@ -16,15 +16,16 @@ namespace SubwayModel.Model
         {
             new Subway("кет", 30),
             new Subway("diyb", 33),
+            new Subway("abcdf", 27),
             new Subway("linq", 25),
         };
     }
 
     static public class Statistics
     {
-        static public List<int> averageSubwayWaiting = new List<int>();
-        static public int averageWaiting;
-        static public List<double> ratioSubwayPassengers = new List<double>();
-        static public double ratioPassengers = .0f;
+        static public List<int> averageSubwayWaitingTime = new List<int>();
+        static public int averageWaitingTime;
+        static public List<double> passengersWaitingTrains = new List<double>();
+        static public double averagePassengersWaitingTrains = .0f;
     }
 }

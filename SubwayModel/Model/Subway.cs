@@ -63,9 +63,9 @@ namespace SubwayModel.Model
         {
             
             if (_waitingTime.Count > 0)
-                Statistics.averageSubwayWaiting.Add((int)Math.Round(_waitingTime.Average()));
+                Statistics.averageSubwayWaitingTime.Add((int)Math.Round(_waitingTime.Average()));
             else
-                Statistics.averageSubwayWaiting.Add(0);
+                Statistics.averageSubwayWaitingTime.Add(0);
             _waitingTime.Clear();
             _passengersWaitTrain.Clear();
         }

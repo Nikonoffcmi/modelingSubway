@@ -21,13 +21,13 @@ namespace SubwayModel.Model
 
         public void Simulation()
         {
-            Statistics.averageSubwayWaiting.Clear();
-            Statistics.ratioSubwayPassengers.Clear();
+            Statistics.averageSubwayWaitingTime.Clear();
+            Statistics.passengersWaitingTrains.Clear();
 
             for (int currTime = 0; currTime < Settings.simulationTime; currTime ++)
             {
-                LeftSide();
-                Statistics.ratioSubwayPassengers.RemoveAt(Statistics.ratioSubwayPassengers.Count - 1);
+                SimulationHour();
+                Statistics.passengersWaitingTrains.RemoveAt(Statistics.passengersWaitingTrains.Count - 1);
             }
 
             foreach (var subway in _subways)
@@ -35,19 +35,19 @@ namespace SubwayModel.Model
                 subway.CalculateStatistics();
             }
 
-            Statistics.averageSubwayWaiting.RemoveAt(_subways.Count - 1);
-            if (Statistics.averageSubwayWaiting.Count > 0)
-                Statistics.averageWaiting = (int)Math.Round(Statistics.averageSubwayWaiting.Average());
+            Statistics.averageSubwayWaitingTime.RemoveAt(_subways.Count - 1);
+            if (Statistics.averageSubwayWaitingTime.Count > 0)
+                Statistics.averageWaitingTime = (int)Math.Round(Statistics.averageSubwayWaitingTime.Average());
             else
-                Statistics.averageWaiting = 0;
+                Statistics.averageWaitingTime = 0;
 
-            if (Statistics.ratioSubwayPassengers.Count > 0)
-                Statistics.ratioPassengers = Math.Round(Statistics.ratioSubwayPassengers.Average());
+            if (Statistics.passengersWaitingTrains.Count > 0)
+                Statistics.averagePassengersWaitingTrains = Math.Round(Statistics.passengersWaitingTrains.Average());
             else
-                Statistics.ratioPassengers = 0;
+                Statistics.averagePassengersWaitingTrains = 0;
         }
 
-        private void LeftSide()
+        private void SimulationHour()
         {
             for (int i = 0; i < _subways.Count; i++)
             {
@@ -73,7 +73,7 @@ namespace SubwayModel.Model
                         _subways[i].Simulation(_trains[j]);
                     }
                 }
-                Statistics.ratioSubwayPassengers.Add(_subways[i].NotPlacedTrainPassengers);
+                Statistics.passengersWaitingTrains.Add(_subways[i].NotPlacedTrainPassengers);
                 _subways[i].NotPlacedTrainPassengers = 0;
             }            
             _trains.Clear();
