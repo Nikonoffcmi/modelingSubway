@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SubwayModel.Model.Passengers;
 
 namespace SubwayModel.Model
@@ -14,17 +12,25 @@ namespace SubwayModel.Model
 
         public Train(int maxCapacity)
         {
+            if (maxCapacity < 1)
+                throw new ArgumentOutOfRangeException(maxCapacity.ToString(), "Максимальная вместимость поезда должна быть больше нуля.\n");
             _maxCapacity = maxCapacity;
             _passengers = new List<Passenger>();
         }
 
         public void EnterSubway(Subway subway)
         {
-            _passengers.RemoveAll(p => p.Destination == subway.Name);
+            if (subway == null)
+                throw new ArgumentNullException(nameof(subway));
+            if (_passengers != null)
+                _passengers.RemoveAll(p => p.Destination == subway.Name);
         }
 
         public bool AreAvailableSeats(Passenger passenger)
         {
+            if (passenger == null)
+                throw new ArgumentNullException(nameof(passenger));
+
             var newCapacity = _passengers.Select(p => p.TakesSpace).ToArray().Sum() + passenger.TakesSpace;
             if (newCapacity <= _maxCapacity)
                 return true;
@@ -34,9 +40,13 @@ namespace SubwayModel.Model
 
         public void AddPassenger(Passenger passenger)
         {
+            if (passenger == null)
+                throw new ArgumentNullException(nameof(passenger));
             var newCapacity = _passengers.Select(p => p.TakesSpace).ToArray().Sum() + passenger.TakesSpace;
             if (newCapacity <= _maxCapacity)
                 _passengers.Add(passenger);
+            else
+                throw new ArgumentException(_maxCapacity.ToString(),"Нет места для пассажира");
         }
     }
 }

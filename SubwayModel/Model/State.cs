@@ -23,9 +23,17 @@ namespace SubwayModel.Model
 
     static public class Statistics
     {
-        static public List<int> averageSubwayWaitingTime = new List<int>();
+        static public Dictionary<string, List<int>> averageSubwayWaitingTime = new Dictionary<string, List<int>>();
         static public int averageWaitingTime;
-        static public List<int> passengersWaitingTrains = new List<int>();
+        static public Dictionary<string, List<int>> passengersWaitingTrains = new Dictionary<string, List<int>>();
         static public double averagePassengersWaitingTrains = .0f;
+
+        static public void DefaultStatistics()
+        {
+            averageSubwayWaitingTime.Clear();
+            averageWaitingTime = 0;
+            passengersWaitingTrains.Clear();
+            averagePassengersWaitingTrains = .0f;
+        }
     }
 }

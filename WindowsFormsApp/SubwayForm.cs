@@ -1,12 +1,5 @@
 ﻿using SubwayModel.Model;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsFormsApp
@@ -22,6 +15,9 @@ namespace WindowsFormsApp
 
         public SubwayForm(Subway subway)
         {
+            if (subway == null)
+                throw new ArgumentNullException(nameof(subway));
+
             InitializeComponent();
             textBox1.Text = subway.Name;
             numericUpDown2.Value = subway.AverageTransmittancePassengers;

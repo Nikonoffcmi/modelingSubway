@@ -1,10 +1,6 @@
-﻿using SubwayModel.Model.Passengers;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SubwayModel.Model
 {
@@ -15,17 +11,24 @@ namespace SubwayModel.Model
 
         public City (List<Subway> subways)
         {
+            if (subways == null)
+                throw new ArgumentNullException(nameof(subways));
+            if (subways.Count == 0)
+                throw new ArgumentException(nameof(subways), "Нет доступных станций для перемещения");
+
             _subways = subways;
             _trains = new List<Train> ();
         }
 
         public void Simulation()
         {
+            if (_subways.Count == 0)
+                throw new ArgumentException(nameof(_subways), "Нет доступных станций для перемещения");
 
             for (int currTime = 0; currTime < Settings.simulationTime; currTime ++)
             {
                 SimulationHour();
-                Statistics.passengersWaitingTrains.RemoveAt(Statistics.passengersWaitingTrains.Count - 1);
+                Statistics.passengersWaitingTrains.Remove(_subways[_subways.Count-1].Name);
             }
 
             foreach (var subway in _subways)
@@ -60,7 +63,14 @@ namespace SubwayModel.Model
                         _subways[i].Simulation(_trains[j]);
                     }
                 }
-                Statistics.passengersWaitingTrains.Add(_subways[i].NotPlacedTrainPassengers);
+
+                if (Statistics.passengersWaitingTrains.ContainsKey(_subways[i].Name))
+                    Statistics.passengersWaitingTrains[_subways[i].Name].Add(_subways[i].NotPlacedTrainPassengers);
+                else
+                {
+                    var l = new List<int>(); l.Add(_subways[i].NotPlacedTrainPassengers);
+                    Statistics.passengersWaitingTrains.Add(_subways[i].Name, l);
+                }
                 _subways[i].NotPlacedTrainPassengers = 0;
             }            
             _trains.Clear();

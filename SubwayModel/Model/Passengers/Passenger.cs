@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SubwayModel.Model.Passengers
 {
@@ -19,12 +16,17 @@ namespace SubwayModel.Model.Passengers
 
         public Passenger(List<string> listSubway)
         {
+            if (listSubway == null)
+                throw new ArgumentNullException(nameof(listSubway));
             _timeWaiting = 0;
             _destination = listSubway[Settings.random.Next(listSubway.Count)];
         }
 
         public bool TryEnterTrain(Train train)
         {
+            if (train == null)
+                throw new ArgumentNullException(nameof(train));
+
             if (!train.AreAvailableSeats(this))
             {
                 _timeWaiting += Settings.averageTransmittanceTrains;
