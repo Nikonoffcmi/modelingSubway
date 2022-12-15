@@ -18,19 +18,27 @@ namespace WindowsFormsApp
         {
             InitializeComponent();
             DefaultSettings();
+            labelAveragePassengersWaitingTrains.ForeColor = Color.White;
+            generalStatisticsLabel.ForeColor = Color.White;
+            labelAverageTrainWaitingTime.ForeColor = Color.White;
+            label8.ForeColor = Color.White;
+            labelAverageWaitingTime.ForeColor = Color.White;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //chart1.Series[0].Points.Clear();
-            //chart2.Series[0].Points.Clear();
-            Settings.simulationTime = Convert.ToInt32(numericUpDown1.Value);
-            Settings.averageTransmittanceTrains = Convert.ToInt32(numericUpDown3.Value);
-            Settings.TrainsCapacity = Convert.ToInt32(numericUpDown4.Value);
             try
             {
+                SetSettings();
                 var city = new City(Settings.Subways);
-                city.Simulation();
+                for (int i = 0; i < 1000; i++)
+                    city.Simulation();
+
+
+                UpdateStattistics();
+                SetChart(Statistics.averageSubwayWaitingTime, chart1);
+                SetChart(Statistics.passengersWaitingTrains, chart2);
+                ShowLabel();
             }
             catch (Exception ex)
             {
@@ -38,13 +46,6 @@ namespace WindowsFormsApp
                     $"Details:\n\n{ex.StackTrace}");
                 DialogResult = DialogResult.None;
             }
-            label4.Text = Statistics.averageWaitingTime.ToString();
-            label5.Text = Statistics.averagePassengersWaitingTrains.ToString();
-            //for (int i = 0; i < Settings.Subways.Count; i++)
-            //{
-            //    chart1.Series[0].Points.AddXY(i, Statistics.ratioSubwayPassengers[i]);
-            //    chart2.Series[0].Points.AddXY(i, Statistics.averageSubwayWaiting[i]);
-            //}
         }
 
         private void DefaultSettings()
@@ -63,61 +64,104 @@ namespace WindowsFormsApp
             LoadData();
         }
 
-        public void LoadData()
+        private void LoadData()
         {
-            dataGridView2.Rows.Clear();
+            dataGridView.Rows.Clear();
             foreach (var subway in Settings.Subways)
             {
-                dataGridView2.Rows.Add(subway.Name, subway.AverageTransmittancePassengers);
+                dataGridView.Rows.Add(subway.Name, subway.AverageTransmittancePassengers);
             }
         }
-        //public void gra(List<int> list)
-        //{
-        //    int N = 10; 
-        //    double[] x = new double[N];
-        //    double[] y = new double[N];
-        //    double ysumm = 0;
-        //    double[] P = new double[N + 1];
-        //    int j = 0;
-        //    for (double i = 1; i < 2; i += 0.2)
-        //    {
-        //        x[j] = i + 0.1;
-        //        ysumm += w * Math.Exp(-w * x[j]);
-        //        j++;
-        //    }
-        //    j = 1;
-        //    for (double i = 1; i < 2; i += 0.2)
-        //    {
-        //        x[j - 1] = i - 0.1;
-        //        P[j] = (w * Math.Exp(-w * x[j - 1])) / ysumm;
-        //        j++;
-        //    }
-        //    for (int k = 0; k <= 1000; k++) //кол-во элементов в выборке
-        //    {
-        //        j = 1;
-        //        double r1 = b.NextDouble(); //вероятность выпадения которая сравнивается с вероятностью попадения в интревал
-        //        while (r1 > P[j])          //выбирает интервал и сравнивает
-        //        {
-        //            r1 = r1 - P[j];
-        //            j = j + 1;
-        //            if (j == 10)
-        //            {
-        //                r1 = r1 - P[j];
-        //                break;
-        //            }
-        //        }
-        //        double r2 = b.NextDouble();
 
-        //        if (r1 < P[j])    //выбирает интервал и генерирует значение на интервале
-        //        {
+        private void SetChart(List<int> list, Chart chart)
+        {
+            chart.Series[0].Points.Clear();
+            int N = 10;
+            double[] x = new double[N];
+            double[] y = new double[N];
+            double[] P = new double[N + 1];
+            int j = 0;
+            j = 1;
+            for (int i = 0; i <= N; i++)
+            {
+                P[i] = (double)list.Max() / N * i;
+            }
+            for (int k = 0; k < list.Count; k++) 
+            {
+                j = 1;
+                while (list[k] > P[j])    
+                {
+                    j = j + 1;
+                    if (j == N)
+                        break;
+                }
 
-        //            int count = 0;
-        //            x[j] = x[j - 1] + r2 * (x[j] - x[j - 1]); //элемент на интервале
-        //            chart1.Series[0].Points.AddXY(x[j], 10);
-        //            //y[j] = w * Math.Exp(-w * x[j]);
-        //        }
-        //        //chart1.Series[0].Points.AddXY(x[j],y[j]);
-        //    }
-        //}
+                if (list[k] <= P[j])
+                {
+                    y[j-1]++;
+                }
+            }
+
+            for (int i = 0; i < N; i++)
+                chart.Series[0].Points.AddXY(P[i], y[i]);
+        }
+
+        private void SetSettings()
+        {
+            Settings.simulationTime = Convert.ToInt32(numericUpDown1.Value);
+            Settings.averageTransmittanceTrains = Convert.ToInt32(numericUpDown3.Value);
+            Settings.TrainsCapacity = Convert.ToInt32(numericUpDown4.Value);
+            Statistics.averageSubwayWaitingTime.Clear();
+            Statistics.passengersWaitingTrains.Clear();
+        }
+
+        private void UpdateStattistics()
+        {
+            Statistics.averageSubwayWaitingTime.RemoveAt(Settings.Subways.Count - 1);
+            if (Statistics.averageSubwayWaitingTime.Count > 0)
+                Statistics.averageWaitingTime = (int)Math.Round(Statistics.averageSubwayWaitingTime.Average());
+            else
+                Statistics.averageWaitingTime = 0;
+
+            if (Statistics.passengersWaitingTrains.Count > 0)
+                Statistics.averagePassengersWaitingTrains = (int)Math.Round(Statistics.passengersWaitingTrains.Average());
+            else
+                Statistics.averagePassengersWaitingTrains = 0;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            var id = dataGridView.SelectedRows[0].Cells[0].RowIndex;
+            var sf = new SubwayForm(Settings.Subways[id]);
+            if (sf.ShowDialog() == DialogResult.OK)
+            {
+                Settings.Subways.RemoveAt(id);
+                Settings.Subways.Insert(id, sf.subway);
+            }
+            LoadData();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            var id = dataGridView.SelectedRows[0].Cells[0].RowIndex;
+            Settings.Subways.RemoveAt(id);
+            LoadData();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            button1_Click(sender, e);
+        }
+
+        private void ShowLabel()
+        {
+            labelAveragePassengersWaitingTrains.ForeColor = Color.Black;
+            generalStatisticsLabel.ForeColor = Color.Black;
+            labelAverageTrainWaitingTime.ForeColor = Color.Black;
+            label8.ForeColor = Color.Black;
+            labelAverageWaitingTime.ForeColor = Color.Black;
+            labelAverageWaitingTime.Text = Statistics.averageWaitingTime.ToString();
+            labelAveragePassengersWaitingTrains.Text = Statistics.averagePassengersWaitingTrains.ToString();
+        }
     }
 }

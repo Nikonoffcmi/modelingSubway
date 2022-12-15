@@ -21,8 +21,6 @@ namespace SubwayModel.Model
 
         public void Simulation()
         {
-            Statistics.averageSubwayWaitingTime.Clear();
-            Statistics.passengersWaitingTrains.Clear();
 
             for (int currTime = 0; currTime < Settings.simulationTime; currTime ++)
             {
@@ -34,17 +32,6 @@ namespace SubwayModel.Model
             {
                 subway.CalculateStatistics();
             }
-
-            Statistics.averageSubwayWaitingTime.RemoveAt(_subways.Count - 1);
-            if (Statistics.averageSubwayWaitingTime.Count > 0)
-                Statistics.averageWaitingTime = (int)Math.Round(Statistics.averageSubwayWaitingTime.Average());
-            else
-                Statistics.averageWaitingTime = 0;
-
-            if (Statistics.passengersWaitingTrains.Count > 0)
-                Statistics.averagePassengersWaitingTrains = Math.Round(Statistics.passengersWaitingTrains.Average());
-            else
-                Statistics.averagePassengersWaitingTrains = 0;
         }
 
         private void SimulationHour()

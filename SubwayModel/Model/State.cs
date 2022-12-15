@@ -25,7 +25,7 @@ namespace SubwayModel.Model
     {
         static public List<int> averageSubwayWaitingTime = new List<int>();
         static public int averageWaitingTime;
-        static public List<double> passengersWaitingTrains = new List<double>();
+        static public List<int> passengersWaitingTrains = new List<int>();
         static public double averagePassengersWaitingTrains = .0f;
     }
 }

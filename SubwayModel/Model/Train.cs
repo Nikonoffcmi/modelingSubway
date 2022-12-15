@@ -27,12 +27,16 @@ namespace SubwayModel.Model
         {
             var newCapacity = _passengers.Select(p => p.TakesSpace).ToArray().Sum() + passenger.TakesSpace;
             if (newCapacity <= _maxCapacity)
-            {
-                _passengers.Add(passenger);
                 return true;
-            }
             else
                 return false;
+        }
+
+        public void AddPassenger(Passenger passenger)
+        {
+            var newCapacity = _passengers.Select(p => p.TakesSpace).ToArray().Sum() + passenger.TakesSpace;
+            if (newCapacity <= _maxCapacity)
+                _passengers.Add(passenger);
         }
     }
 }

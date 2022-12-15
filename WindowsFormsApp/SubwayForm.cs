@@ -14,9 +14,17 @@ namespace WindowsFormsApp
     public partial class SubwayForm : Form
     {
         public Subway subway { get; set; }
+
         public SubwayForm()
         {
             InitializeComponent();
+        }
+
+        public SubwayForm(Subway subway)
+        {
+            InitializeComponent();
+            textBox1.Text = subway.Name;
+            numericUpDown2.Value = subway.AverageTransmittancePassengers;
         }
 
         private void button1_Click(object sender, EventArgs e)

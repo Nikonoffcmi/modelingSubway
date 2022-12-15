@@ -53,9 +53,9 @@ namespace SubwayModel.Model
             for (int i = 0; i < newPassengers; i++)
             {
                 if (Settings.random.Next(0, 10) == 1)
-                    _passengersWaitTrain.Add(new PassengerLuggage(listSubway, _name));
+                    _passengersWaitTrain.Add(new PassengerLuggage(listSubway));
                 else
-                    _passengersWaitTrain.Add(new OrdinaryPassenger(listSubway, _name));
+                    _passengersWaitTrain.Add(new OrdinaryPassenger(listSubway));
             }
         }
 

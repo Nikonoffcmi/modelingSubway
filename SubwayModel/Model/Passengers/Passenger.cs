@@ -30,6 +30,8 @@ namespace SubwayModel.Model.Passengers
                 _timeWaiting += Settings.averageTransmittanceTrains;
                 return false;
             }
+            else
+                train.AddPassenger(this);
             return true;
         }
     }
