@@ -8,8 +8,9 @@ namespace SubwayModel.Model
     {
         private List<Subway> _subways;
         private List<Train> _trains;
+        private IPassengerFactory _passengerFactory;
 
-        public City (List<Subway> subways)
+        public City (List<Subway> subways, IPassengerFactory passengerFactory)
         {
             if (subways == null)
                 throw new ArgumentNullException(nameof(subways));
@@ -18,6 +19,7 @@ namespace SubwayModel.Model
 
             _subways = subways;
             _trains = new List<Train> ();
+            _passengerFactory = passengerFactory;
         }
 
         public void Simulation()
@@ -48,7 +50,7 @@ namespace SubwayModel.Model
                     for (int Minutes = 0; Minutes < 60; Minutes += Settings.averageTransmittanceTrains)
                     {
                         var train = new Train(Settings.TrainsCapacity);
-                        _subways[i].PassengerEnter(SubwayNames);
+                        _subways[i].PassengerEnter(SubwayNames, _passengerFactory);
                         _subways[i].Simulation(train);
                         _trains.Add(train);
                     }
@@ -59,7 +61,7 @@ namespace SubwayModel.Model
                     {
                         _trains[j].EnterSubway(_subways[i]);
                         if (i+1 != _subways.Count)
-                            _subways[i].PassengerEnter(SubwayNames);
+                            _subways[i].PassengerEnter(SubwayNames, _passengerFactory);
                         _subways[i].Simulation(_trains[j]);
                     }
                 }

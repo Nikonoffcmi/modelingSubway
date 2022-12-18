@@ -19,6 +19,7 @@ namespace WindowsFormsApp
             labelAverageTrainWaitingTime.ForeColor = Color.WhiteSmoke;
             label8.ForeColor = Color.WhiteSmoke;
             labelAverageWaitingTime.ForeColor = Color.WhiteSmoke;
+            label5.ForeColor = Color.WhiteSmoke;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -27,7 +28,7 @@ namespace WindowsFormsApp
             {
                 SetSettings();
                 Statistics.DefaultStatistics();
-                var city = new City(Settings.Subways);
+                var city = new City(Settings.Subways, new TakeSpacePassengerFactory());
                 for (int i = 0; i < 1000; i++)
                     city.Simulation();
 
@@ -238,6 +239,7 @@ namespace WindowsFormsApp
             labelAverageTrainWaitingTime.ForeColor = Color.Black;
             label8.ForeColor = Color.Black;
             labelAverageWaitingTime.ForeColor = Color.Black;
+            label5.ForeColor = Color.Black;
             labelAverageWaitingTime.Text = Statistics.averageWaitingTime.ToString();
             labelAveragePassengersWaitingTrains.Text = Statistics.averagePassengersWaitingTrains.ToString();
         }

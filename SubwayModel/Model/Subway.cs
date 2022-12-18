@@ -49,7 +49,7 @@ namespace SubwayModel.Model
             }            
         }
 
-        public void PassengerEnter(List<string> listSubway)
+        public void PassengerEnter(List<string> listSubway, IPassengerFactory passengerFactory)
         {
             if (listSubway == null)
                 throw new ArgumentNullException(nameof(listSubway));
@@ -64,10 +64,7 @@ namespace SubwayModel.Model
 
             for (int i = 0; i < newPassengers; i++)
             {
-                if (Settings.random.Next(0, 10) == 1)
-                    _passengersWaitTrain.Add(new PassengerLuggage(listSubway));
-                else
-                    _passengersWaitTrain.Add(new OrdinaryPassenger(listSubway));
+                    _passengersWaitTrain.Add(passengerFactory.CreatePassenger(listSubway));
             }
         }
 

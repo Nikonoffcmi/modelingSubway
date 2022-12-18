@@ -42,9 +42,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\City.cs" />
+    <Compile Include="Model\IPassengerFactory.cs" />
     <Compile Include="Model\Passengers\OrdinaryPassenger.cs" />
     <Compile Include="Model\Passengers\Passenger.cs" />
     <Compile Include="Model\Passengers\PassengerLuggage.cs" />
+    <Compile Include="Model\TakeSpacePassengerFactory.cs" />
     <Compile Include="Model\Train.cs" />
     <Compile Include="Model\State.cs" />
     <Compile Include="Model\Subway.cs" />
