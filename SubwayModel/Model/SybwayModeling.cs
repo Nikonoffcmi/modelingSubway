@@ -4,17 +4,17 @@ using System.Linq;
 
 namespace SubwayModel.Model
 {
-    public class City
+    public class SybwayModeling
     {
         private List<Subway> _subways;
         private List<Train> _trains;
         private IPassengerFactory _passengerFactory;
 
-        public City (List<Subway> subways, IPassengerFactory passengerFactory)
+        public SybwayModeling (List<Subway> subways, IPassengerFactory passengerFactory)
         {
             if (subways == null)
                 throw new ArgumentNullException(nameof(subways));
-            if (subways.Count == 0)
+            if (subways.Count <= 1)
                 throw new ArgumentException(nameof(subways), "Нет доступных станций для перемещения");
 
             _subways = subways;
@@ -24,19 +24,36 @@ namespace SubwayModel.Model
 
         public void Simulation()
         {
+            Statistics.DefaultStatistics();
+
             if (_subways.Count == 0)
                 throw new ArgumentException(nameof(_subways), "Нет доступных станций для перемещения");
 
-            for (int currTime = 0; currTime < Settings.simulationTime; currTime ++)
+            for (int i = 0; i < 1000; i++)
             {
-                SimulationHour();
-                Statistics.passengersWaitingTrains.Remove(_subways[_subways.Count-1].Name);
+                for (int currTime = 0; currTime < Settings.simulationTime; currTime++)
+                {
+                    SimulationHour();
+                    Statistics.passengersWaitingTrains.Remove(_subways[_subways.Count - 1].Name);
+                }
+
+                foreach (var subway in _subways)
+                {
+                    subway.CalculateStatistics();
+                }
             }
 
-            foreach (var subway in _subways)
-            {
-                subway.CalculateStatistics();
-            }
+            var list = new List<int>();
+            foreach (var s in Settings.Subways)
+                list.AddRange(Statistics.averageSubwayWaitingTime[s.Name]);
+            Statistics.averageSubwayWaitingTime.Add("Общая", list);
+            Statistics.averageWaitingTime = (int)Math.Round(list.Average());
+
+            var list2 = new List<int>();
+            for (int i = 0; i < Settings.Subways.Count - 1; i++)
+                list2.AddRange(Statistics.passengersWaitingTrains[Settings.Subways[i].Name]);
+            Statistics.passengersWaitingTrains.Add("Общая", list2);
+            Statistics.averagePassengersWaitingTrains = (int)Math.Round(list2.Average());
         }
 
         private void SimulationHour()
@@ -49,9 +66,9 @@ namespace SubwayModel.Model
                 {
                     for (int Minutes = 0; Minutes < 60; Minutes += Settings.averageTransmittanceTrains)
                     {
-                        var train = new Train(Settings.TrainsCapacity);
-                        _subways[i].PassengerEnter(SubwayNames, _passengerFactory);
-                        _subways[i].Simulation(train);
+                        var train = new Train(Settings.trainsCapacity);
+                        _subways[i].PassengersEnter(SubwayNames, _passengerFactory);
+                        _subways[i].PassengersGetOnTrain(train);
                         _trains.Add(train);
                     }
                 }
@@ -61,8 +78,8 @@ namespace SubwayModel.Model
                     {
                         _trains[j].EnterSubway(_subways[i]);
                         if (i+1 != _subways.Count)
-                            _subways[i].PassengerEnter(SubwayNames, _passengerFactory);
-                        _subways[i].Simulation(_trains[j]);
+                            _subways[i].PassengersEnter(SubwayNames, _passengerFactory);
+                        _subways[i].PassengersGetOnTrain(_trains[j]);
                     }
                 }
 

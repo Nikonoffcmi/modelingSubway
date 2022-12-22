@@ -14,6 +14,7 @@ namespace SubwayModel.Model
         {
             if (maxCapacity < 1)
                 throw new ArgumentOutOfRangeException(maxCapacity.ToString(), "Максимальная вместимость поезда должна быть больше нуля.\n");
+            
             _maxCapacity = maxCapacity;
             _passengers = new List<Passenger>();
         }
@@ -40,10 +41,7 @@ namespace SubwayModel.Model
 
         public void AddPassenger(Passenger passenger)
         {
-            if (passenger == null)
-                throw new ArgumentNullException(nameof(passenger));
-            var newCapacity = _passengers.Select(p => p.TakesSpace).ToArray().Sum() + passenger.TakesSpace;
-            if (newCapacity <= _maxCapacity)
+            if (AreAvailableSeats(passenger))
                 _passengers.Add(passenger);
             else
                 throw new ArgumentException(_maxCapacity.ToString(),"Нет места для пассажира");

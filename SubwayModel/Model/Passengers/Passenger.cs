@@ -18,6 +18,9 @@ namespace SubwayModel.Model.Passengers
         {
             if (listSubway == null)
                 throw new ArgumentNullException(nameof(listSubway));
+            if (listSubway.Count == 0)
+                throw new ArgumentException(nameof(listSubway), "Нет доступных станций для перемещения");
+
             _timeWaiting = 0;
             _destination = listSubway[Settings.random.Next(listSubway.Count)];
         }

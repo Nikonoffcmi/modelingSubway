@@ -19,7 +19,7 @@ namespace SubwayModel.Model
 
         public Subway (string name, int averageTransmittancePassengers)
         {
-            if (name == null)
+            if (name == null || name.Length == 0)
                 throw new ArgumentNullException(nameof(name));
             if (averageTransmittancePassengers < 1)
                 throw new ArgumentOutOfRangeException(averageTransmittancePassengers.ToString(), "Пассажиропоток должен быть больше 0");
@@ -31,7 +31,7 @@ namespace SubwayModel.Model
             _waitingTime = new List<int>();
         }
 
-        public void Simulation(Train train)
+        public void PassengersGetOnTrain(Train train)
         {
             if (train == null)
                 throw new ArgumentNullException(nameof(train));
@@ -49,14 +49,14 @@ namespace SubwayModel.Model
             }            
         }
 
-        public void PassengerEnter(List<string> listSubway, IPassengerFactory passengerFactory)
+        public void PassengersEnter(List<string> listSubway, IPassengerFactory passengerFactory)
         {
             if (listSubway == null)
                 throw new ArgumentNullException(nameof(listSubway));
             if (listSubway.Count == 0)
                 throw new ArgumentException(nameof(listSubway), "Нет доступных станций для перемещения");
             if (listSubway.Where(x => x.Equals(_name)).Count() == 1)
-                throw new ArgumentException(nameof(listSubway), "название не должно быть в списке ");
+                throw new ArgumentException(nameof(listSubway), "Станции не должно быть в списке ");
 
             var newPassengers = Settings.random.Next(
                 (int)Math.Round(_averageTransmittancePassengers * 0.85 / (60 / Settings.averageTransmittanceTrains)),
@@ -70,6 +70,7 @@ namespace SubwayModel.Model
 
         public void CalculateStatistics()
         {
+            _waitingTime.AddRange(_passengersWaitTrain.Select(p => p.TimeWaiting));
             int wt = 0;
             if (_waitingTime.Count > 0) 
                 wt = (int)Math.Round(_waitingTime.Average());

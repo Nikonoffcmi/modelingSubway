@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubwayBL", "SubwayModel\Sub
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp", "WindowsFormsApp\WindowsFormsApp.csproj", "{8BB8E65C-5926-4BE1-8B93-67AB8B1A0DE2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubwayBLTests", "SubwayBLTests\SubwayBLTests.csproj", "{79D05076-867E-45CF-9B61-E7194C5F6028}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{8BB8E65C-5926-4BE1-8B93-67AB8B1A0DE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BB8E65C-5926-4BE1-8B93-67AB8B1A0DE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BB8E65C-5926-4BE1-8B93-67AB8B1A0DE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79D05076-867E-45CF-9B61-E7194C5F6028}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79D05076-867E-45CF-9B61-E7194C5F6028}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79D05076-867E-45CF-9B61-E7194C5F6028}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79D05076-867E-45CF-9B61-E7194C5F6028}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

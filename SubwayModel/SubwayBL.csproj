@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\City.cs" />
+    <Compile Include="Model\SybwayModeling.cs" />
     <Compile Include="Model\IPassengerFactory.cs" />
     <Compile Include="Model\Passengers\OrdinaryPassenger.cs" />
     <Compile Include="Model\Passengers\Passenger.cs" />

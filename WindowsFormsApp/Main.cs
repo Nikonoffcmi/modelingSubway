@@ -27,14 +27,11 @@ namespace WindowsFormsApp
             try
             {
                 SetSettings();
-                Statistics.DefaultStatistics();
-                var city = new City(Settings.Subways, new TakeSpacePassengerFactory());
-                for (int i = 0; i < 1000; i++)
-                    city.Simulation();
 
+                var sybwayModeling = new SybwayModeling(Settings.Subways, new TakeSpacePassengerFactory());
+                sybwayModeling.Simulation();
 
-                UpdateStattistics();
-                ShowLabel();
+                ShowStatistics();
             }
             catch (ArgumentNullException ex)
             {
@@ -60,7 +57,7 @@ namespace WindowsFormsApp
         {
             numericUpDown1.Value = Settings.simulationTime;
             numericUpDown3.Value = Settings.averageTransmittanceTrains;
-            numericUpDown4.Value = Settings.TrainsCapacity;
+            numericUpDown4.Value = Settings.trainsCapacity;
             LoadData();
         }
 
@@ -160,34 +157,7 @@ namespace WindowsFormsApp
         {
             Settings.simulationTime = Convert.ToInt32(numericUpDown1.Value);
             Settings.averageTransmittanceTrains = Convert.ToInt32(numericUpDown3.Value);
-            Settings.TrainsCapacity = Convert.ToInt32(numericUpDown4.Value);
-        }
-
-        private void UpdateStattistics()
-        {
-            try
-            {
-                var list = new List<int>();
-                foreach (var s in Settings.Subways)
-                    list.AddRange(Statistics.averageSubwayWaitingTime[s.Name]);
-                Statistics.averageSubwayWaitingTime.Add("Общая", list);
-                SetChart(Statistics.averageSubwayWaitingTime[comboBox1.SelectedItem.ToString()], chart1);
-                Statistics.averageWaitingTime = (int)Math.Round(list.Average());
-                list.Clear();
-
-                for (int i = 0; i < Settings.Subways.Count - 1; i++)
-                    list.AddRange(Statistics.passengersWaitingTrains[Settings.Subways[i].Name]);
-                Statistics.passengersWaitingTrains.Add("Общая", list);
-                SetChart(Statistics.passengersWaitingTrains[comboBox1.SelectedItem.ToString()], chart2);
-                Statistics.averagePassengersWaitingTrains = (int)Math.Round(list.Average());
-                ShowLabel();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error.\n\nError message: {ex.Message}\n\n" +
-                    $"Details:\n\n{ex.StackTrace}");
-                DialogResult = DialogResult.None;
-            }
+            Settings.trainsCapacity = Convert.ToInt32(numericUpDown4.Value);
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -232,7 +202,7 @@ namespace WindowsFormsApp
             button1_Click(sender, e);
         }
 
-        private void ShowLabel()
+        private void ShowStatistics()
         {
             labelAveragePassengersWaitingTrains.ForeColor = Color.Black;
             generalStatisticsLabel.ForeColor = Color.Black;
@@ -242,6 +212,9 @@ namespace WindowsFormsApp
             label5.ForeColor = Color.Black;
             labelAverageWaitingTime.Text = Statistics.averageWaitingTime.ToString();
             labelAveragePassengersWaitingTrains.Text = Statistics.averagePassengersWaitingTrains.ToString();
+
+            SetChart(Statistics.averageSubwayWaitingTime[comboBox1.SelectedItem.ToString()], chart1);
+            SetChart(Statistics.passengersWaitingTrains[comboBox1.SelectedItem.ToString()], chart2);
         }
 
         private void UpdatecomboBox()
