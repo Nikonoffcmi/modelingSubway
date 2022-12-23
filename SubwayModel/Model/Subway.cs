@@ -11,11 +11,9 @@ namespace SubwayModel.Model
         private int _averageTransmittancePassengers;
         private List<Passenger> _passengersWaitTrain;
         private List<int> _waitingTime;
-        private int _notPlacedTrainPassengers;
 
         public string Name => _name;
         public int AverageTransmittancePassengers => _averageTransmittancePassengers;
-        public int NotPlacedTrainPassengers { get => _notPlacedTrainPassengers; set => _notPlacedTrainPassengers = 0; }
 
         public Subway (string name, int averageTransmittancePassengers)
         {
@@ -25,7 +23,6 @@ namespace SubwayModel.Model
                 throw new ArgumentOutOfRangeException(averageTransmittancePassengers.ToString(), "Пассажиропоток должен быть больше 0");
 
             _name = name;
-            _notPlacedTrainPassengers = 0;
             _averageTransmittancePassengers = averageTransmittancePassengers;
             _passengersWaitTrain = new List<Passenger>();
             _waitingTime = new List<int>();
@@ -33,6 +30,7 @@ namespace SubwayModel.Model
 
         public void PassengersGetOnTrain(Train train)
         {
+            var notPlacedTrainPassengers = 0;
             if (train == null)
                 throw new ArgumentNullException(nameof(train));
 
@@ -40,13 +38,21 @@ namespace SubwayModel.Model
             foreach (var passenger in temp)
             {
                 if (!passenger.TryEnterTrain(train))
-                    _notPlacedTrainPassengers++;
+                    notPlacedTrainPassengers++;
                 else
                 {
                     _passengersWaitTrain.Remove(passenger);
                     _waitingTime.Add(passenger.TimeWaiting);
                 }
-            }            
+            }
+
+            if (Statistics.passengersWaitingTrains.ContainsKey(_name))
+                Statistics.passengersWaitingTrains[_name].Add(notPlacedTrainPassengers);
+            else
+            {
+                var l = new List<int>(); l.Add(notPlacedTrainPassengers);
+                Statistics.passengersWaitingTrains.Add(_name, l);
+            }
         }
 
         public void PassengersEnter(List<string> listSubway, IPassengerFactory passengerFactory)
@@ -64,7 +70,7 @@ namespace SubwayModel.Model
 
             for (int i = 0; i < newPassengers; i++)
             {
-                    _passengersWaitTrain.Add(passengerFactory.CreatePassenger(listSubway));
+                _passengersWaitTrain.Add(passengerFactory.CreatePassenger(listSubway));
             }
         }
 

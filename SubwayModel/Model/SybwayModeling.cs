@@ -82,15 +82,6 @@ namespace SubwayModel.Model
                         _subways[i].PassengersGetOnTrain(_trains[j]);
                     }
                 }
-
-                if (Statistics.passengersWaitingTrains.ContainsKey(_subways[i].Name))
-                    Statistics.passengersWaitingTrains[_subways[i].Name].Add(_subways[i].NotPlacedTrainPassengers);
-                else
-                {
-                    var l = new List<int>(); l.Add(_subways[i].NotPlacedTrainPassengers);
-                    Statistics.passengersWaitingTrains.Add(_subways[i].Name, l);
-                }
-                _subways[i].NotPlacedTrainPassengers = 0;
             }            
             _trains.Clear();
         }

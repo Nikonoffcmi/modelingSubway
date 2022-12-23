@@ -2,6 +2,7 @@
 using SubwayModel.Model.Passengers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SubwayModel.Model.Tests
 {
@@ -42,13 +43,14 @@ namespace SubwayModel.Model.Tests
         [TestMethod()]
         public void PassengersGetOnTrainTest()
         {
+            Settings.DefaultSettings();
             var list = new List<string>() { "cesd", "sed", "ved" };
             var train = new Train(10);
             var subway = new Subway("fe", 3);
 
             subway.PassengersEnter(list, new TakeSpacePassengerFactory());
             subway.PassengersGetOnTrain(train);
-            var result = subway.NotPlacedTrainPassengers == 0;
+            var result = Statistics.passengersWaitingTrains[subway.Name].Average() == 0;
 
             Assert.IsTrue(result);
         }
@@ -56,6 +58,7 @@ namespace SubwayModel.Model.Tests
         [TestMethod()]
         public void PassengersNotGetOnTrainTest()
         {
+            Settings.DefaultSettings();
             var list = new List<string>() { "cesd", "sed", "ved" };
             var train = new Train(1);
             var subway = new Subway("fe", 10);
@@ -63,7 +66,7 @@ namespace SubwayModel.Model.Tests
 
             subway.PassengersEnter(list, new TakeSpacePassengerFactory());
             subway.PassengersGetOnTrain(train);
-            var result = subway.NotPlacedTrainPassengers > 0;
+            var result = Statistics.passengersWaitingTrains[subway.Name].Average() > 0;
 
             Assert.IsTrue(result);
         }

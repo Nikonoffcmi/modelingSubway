@@ -36,7 +36,7 @@ namespace SubwayModel.Model.Tests
 
             city.Simulation();
 
-            var result = Statistics.averagePassengersWaitingTrains > 59 && Statistics.averagePassengersWaitingTrains < 66;
+            var result = Statistics.averagePassengersWaitingTrains > 5 && Statistics.averagePassengersWaitingTrains < 10;
             Assert.IsTrue(result);
         }
 
