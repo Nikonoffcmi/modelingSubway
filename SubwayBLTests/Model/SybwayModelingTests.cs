@@ -11,7 +11,7 @@ namespace SubwayModel.Model.Tests
         public void SybwayModelingTest()
         {
             var subways = Settings.Subways;
-            var factoty = new TakeSpacePassengerFactory();
+            var factoty = new TakeSpacePassengerFactoryLow();
 
             var city = new SybwayModeling(subways, factoty);
             
@@ -23,7 +23,7 @@ namespace SubwayModel.Model.Tests
         public void SybwayModelingSubwaysExceptionTest()
         {
             var subways = new List<Subway>();
-            var factoty = new TakeSpacePassengerFactory();
+            var factoty = new TakeSpacePassengerFactoryLow();
 
             new SybwayModeling(subways, factoty);
         }
@@ -32,11 +32,11 @@ namespace SubwayModel.Model.Tests
         public void DefaultSimulationTest()
         {
             Settings.DefaultSettings();
-            var city = new SybwayModeling(Settings.Subways, new TakeSpacePassengerFactory());
+            var city = new SybwayModeling(Settings.Subways, new TakeSpacePassengerFactoryLow());
 
             city.Simulation();
 
-            var result = Statistics.averagePassengersWaitingTrains > 5 && Statistics.averagePassengersWaitingTrains < 10;
+            var result = Statistics.averagePassengersWaitingTrains >= 5 && Statistics.averagePassengersWaitingTrains < 10;
             Assert.IsTrue(result);
         }
 
@@ -44,7 +44,7 @@ namespace SubwayModel.Model.Tests
         public void SmallAverageTransmittanceTrainsSimulationTest()
         {
             Settings.averageTransmittanceTrains = 2;
-            var city = new SybwayModeling(Settings.Subways, new TakeSpacePassengerFactory());
+            var city = new SybwayModeling(Settings.Subways, new TakeSpacePassengerFactoryLow());
 
             city.Simulation();
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SubwayModel.Model
 {
-    public class TakeSpacePassengerFactory : IPassengerFactory
+    public class TakeSpacePassengerFactoryLow : IPassengerFactory
     {
         public Passenger CreatePassenger(List<string> listSubway)
         {

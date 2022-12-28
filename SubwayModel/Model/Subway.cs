@@ -87,6 +87,7 @@ namespace SubwayModel.Model
                 var l = new List<int>(); l.Add(wt);
                 Statistics.averageSubwayWaitingTime.Add(_name, l);
             }
+
             _waitingTime.Clear();
             _passengersWaitTrain.Clear();
         }

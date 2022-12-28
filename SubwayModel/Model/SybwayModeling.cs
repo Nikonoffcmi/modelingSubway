@@ -29,7 +29,7 @@ namespace SubwayModel.Model
             if (_subways.Count == 0)
                 throw new ArgumentException(nameof(_subways), "Нет доступных станций для перемещения");
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < Settings.numberRuns; i++)
             {
                 for (int currTime = 0; currTime < Settings.simulationTime; currTime++)
                 {
@@ -39,25 +39,28 @@ namespace SubwayModel.Model
 
                 foreach (var subway in _subways)
                 {
-                    subway.CalculateStatistics();
+                    if (_subways[_subways.Count - 1].Name != subway.Name)
+                        subway.CalculateStatistics();
                 }
             }
 
             var list = new List<int>();
             foreach (var s in Settings.Subways)
-                list.AddRange(Statistics.averageSubwayWaitingTime[s.Name]);
+                if (_subways[_subways.Count - 1].Name != s.Name)
+                    list.AddRange(Statistics.averageSubwayWaitingTime[s.Name]);
             Statistics.averageSubwayWaitingTime.Add("Общая", list);
             Statistics.averageWaitingTime = (int)Math.Round(list.Average());
 
             var list2 = new List<int>();
             for (int i = 0; i < Settings.Subways.Count - 1; i++)
-                list2.AddRange(Statistics.passengersWaitingTrains[Settings.Subways[i].Name]);
+                    list2.AddRange(Statistics.passengersWaitingTrains[Settings.Subways[i].Name]);
             Statistics.passengersWaitingTrains.Add("Общая", list2);
             Statistics.averagePassengersWaitingTrains = (int)Math.Round(list2.Average());
         }
 
         private void SimulationHour()
         {
+            var trainCapacity = Settings.vanCapacity * Settings.numberVan;
             for (int i = 0; i < _subways.Count; i++)
             {
                 var SubwayNames = _subways.Select(s => s.Name).ToList();
@@ -66,7 +69,7 @@ namespace SubwayModel.Model
                 {
                     for (int Minutes = 0; Minutes < 60; Minutes += Settings.averageTransmittanceTrains)
                     {
-                        var train = new Train(Settings.trainsCapacity);
+                        var train = new Train(trainCapacity);
                         _subways[i].PassengersEnter(SubwayNames, _passengerFactory);
                         _subways[i].PassengersGetOnTrain(train);
                         _trains.Add(train);

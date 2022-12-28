@@ -8,7 +8,10 @@ namespace SubwayModel.Model
         static public Random random = new Random();
         static public int simulationTime = 5;
         static public int averageTransmittanceTrains = 7;
-        static public int trainsCapacity = 6;
+        static public int numberVan = 3;
+        static public int vanCapacity = 2;
+        static public int numberRuns = 1000;
+        static public IPassengerFactory passengerFactory = new TakeSpacePassengerFactoryLow();
         static public List<Subway> Subways = new List<Subway>()
         {
             new Subway("кет", 30),
@@ -21,7 +24,10 @@ namespace SubwayModel.Model
         {
             simulationTime = 5;
             averageTransmittanceTrains = 7;
-            trainsCapacity = 6;
+            vanCapacity = 2;
+            numberRuns = 1000;
+            numberVan = 4;
+            passengerFactory = new TakeSpacePassengerFactoryLow();
             Subways = new List<Subway>()
             {
             new Subway("кет", 30),

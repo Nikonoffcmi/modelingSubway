@@ -48,7 +48,7 @@ namespace SubwayModel.Model.Tests
             var train = new Train(10);
             var subway = new Subway("fe", 3);
 
-            subway.PassengersEnter(list, new TakeSpacePassengerFactory());
+            subway.PassengersEnter(list, new TakeSpacePassengerFactoryLow());
             subway.PassengersGetOnTrain(train);
             var result = Statistics.passengersWaitingTrains[subway.Name].Average() == 0;
 
@@ -64,7 +64,7 @@ namespace SubwayModel.Model.Tests
             var subway = new Subway("fe", 10);
             train.AddPassenger(new OrdinaryPassenger(new List<string> { "fe", "vedc" }));
 
-            subway.PassengersEnter(list, new TakeSpacePassengerFactory());
+            subway.PassengersEnter(list, new TakeSpacePassengerFactoryLow());
             subway.PassengersGetOnTrain(train);
             var result = Statistics.passengersWaitingTrains[subway.Name].Average() > 0;
 
@@ -77,7 +77,7 @@ namespace SubwayModel.Model.Tests
             var list = new List<string>() { "cesd", "sed", "ved" };
             var subway = new Subway("vsed", 12);
 
-            subway.PassengersEnter(list, new TakeSpacePassengerFactory());
+            subway.PassengersEnter(list, new TakeSpacePassengerFactoryLow());
 
         }
     }

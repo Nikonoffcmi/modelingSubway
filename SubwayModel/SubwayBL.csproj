@@ -41,12 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Factory\TakeSpacePassengerFactoryHigh.cs" />
+    <Compile Include="Model\Factory\TakeSpacePassengerFactoryMiddle.cs" />
     <Compile Include="Model\SybwayModeling.cs" />
-    <Compile Include="Model\IPassengerFactory.cs" />
+    <Compile Include="Model\Factory\IPassengerFactory.cs" />
     <Compile Include="Model\Passengers\OrdinaryPassenger.cs" />
     <Compile Include="Model\Passengers\Passenger.cs" />
     <Compile Include="Model\Passengers\PassengerLuggage.cs" />
-    <Compile Include="Model\TakeSpacePassengerFactory.cs" />
+    <Compile Include="Model\Factory\TakeSpacePassengerFactoryLow.cs" />
     <Compile Include="Model\Train.cs" />
     <Compile Include="Model\State.cs" />
     <Compile Include="Model\Subway.cs" />

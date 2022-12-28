@@ -1,4 +1,5 @@
 ﻿using SubwayModel.Model;
+using SubwayModel.Model.Factory;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -28,7 +29,7 @@ namespace WindowsFormsApp
             {
                 SetSettings();
 
-                var sybwayModeling = new SybwayModeling(Settings.Subways, new TakeSpacePassengerFactory());
+                var sybwayModeling = new SybwayModeling(Settings.Subways, Settings.passengerFactory);
                 sybwayModeling.Simulation();
 
                 ShowStatistics();
@@ -57,7 +58,13 @@ namespace WindowsFormsApp
         {
             numericUpDown1.Value = Settings.simulationTime;
             numericUpDown3.Value = Settings.averageTransmittanceTrains;
-            numericUpDown4.Value = Settings.trainsCapacity;
+            numericUpDown4.Value = Settings.vanCapacity;
+            numericUpDown2.Value = Settings.numberRuns;
+            numericUpDown5.Value = Settings.numberVan;
+            comboBox2.Items.Add("10%");
+            comboBox2.Items.Add("33%");
+            comboBox2.Items.Add("50%");
+            comboBox2.SelectedIndex = 0;
             LoadData();
         }
 
@@ -157,7 +164,26 @@ namespace WindowsFormsApp
         {
             Settings.simulationTime = Convert.ToInt32(numericUpDown1.Value);
             Settings.averageTransmittanceTrains = Convert.ToInt32(numericUpDown3.Value);
-            Settings.trainsCapacity = Convert.ToInt32(numericUpDown4.Value);
+            Settings.vanCapacity = Convert.ToInt32(numericUpDown4.Value);
+            Settings.numberRuns = Convert.ToInt32(numericUpDown2.Value);
+            Settings.numberVan = Convert.ToInt32(numericUpDown5.Value);
+
+            switch (comboBox2.SelectedIndex)
+            {
+                case 0:
+                    Settings.passengerFactory = new TakeSpacePassengerFactoryLow();
+                    break;
+
+                case 1:
+                    Settings.passengerFactory = new TakeSpacePassengerFactoryMiddle();
+                    break;
+
+                case 2:
+                    Settings.passengerFactory = new TakeSpacePassengerFactoryHigh();
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -225,6 +251,15 @@ namespace WindowsFormsApp
                 comboBox1.Items.Add(s.Name);
             comboBox1.SelectedItem = "Общая";
             comboBox1.Items.RemoveAt(comboBox1.Items.Count - 1);
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Statistics.averageSubwayWaitingTime.Keys.Count != 0)
+            {
+                SetChart(Statistics.averageSubwayWaitingTime[comboBox1.SelectedItem.ToString()], chart1);
+                SetChart(Statistics.passengersWaitingTrains[comboBox1.SelectedItem.ToString()], chart2);
+            }
         }
     }
 }
